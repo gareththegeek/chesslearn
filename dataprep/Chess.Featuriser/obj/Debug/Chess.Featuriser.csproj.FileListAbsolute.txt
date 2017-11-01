@@ -1,0 +1,12 @@
+E:\Libraries\Development\From Work\Projects\Chess\Chess.Featuriser\bin\Debug\KingBaseLite2016-03-A00-A39.pgn
+E:\Libraries\Development\From Work\Projects\Chess\Chess.Featuriser\bin\Debug\options.json
+E:\Libraries\Development\From Work\Projects\Chess\Chess.Featuriser\bin\Debug\simple.pgn
+E:\Libraries\Development\From Work\Projects\Chess\Chess.Featuriser\bin\Debug\Chess.Featuriser.exe.config
+E:\Libraries\Development\From Work\Projects\Chess\Chess.Featuriser\bin\Debug\Chess.Featuriser.exe
+E:\Libraries\Development\From Work\Projects\Chess\Chess.Featuriser\bin\Debug\Chess.Featuriser.pdb
+E:\Libraries\Development\From Work\Projects\Chess\Chess.Featuriser\bin\Debug\CommandLine.dll
+E:\Libraries\Development\From Work\Projects\Chess\Chess.Featuriser\bin\Debug\Newtonsoft.Json.dll
+E:\Libraries\Development\From Work\Projects\Chess\Chess.Featuriser\bin\Debug\CommandLine.xml
+E:\Libraries\Development\From Work\Projects\Chess\Chess.Featuriser\bin\Debug\Newtonsoft.Json.xml
+E:\Libraries\Development\From Work\Projects\Chess\Chess.Featuriser\obj\Debug\Chess.Featuriser.exe
+E:\Libraries\Development\From Work\Projects\Chess\Chess.Featuriser\obj\Debug\Chess.Featuriser.pdb
