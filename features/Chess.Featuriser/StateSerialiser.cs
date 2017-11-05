@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using Chess.Featuriser.Pgn;
 using System.Text;
@@ -43,8 +42,6 @@ namespace Chess.Featuriser
             builder.Append("EpFile").Append(", ");
             builder.Append("EpRank").Append(", ");
 
-            string[] pieces;
-
             WritePieceCountHeadings("W", builder);
             WritePieceCountHeadings("B", builder);
 
@@ -58,6 +55,20 @@ namespace Chess.Featuriser
             WriteAttackMapHeadings("B", builder);
 
             sw.WriteLine(builder.ToString());
+        }
+
+        private void WriteAttackMapHeadings(string colour, StringBuilder builder)
+        {
+            var ranks = new[] { "1", "2", "3", "4", "5", "6", "7", "8" };
+            var files = new[] { "a", "b", "c", "d", "e", "f", "g", "h" };
+
+            foreach (var rank in ranks)
+            {
+                foreach (var file in files)
+                {
+                    builder.Append($"{colour}A{file}{rank}").Append(", ");
+                }
+            }
         }
 
         private static void WriteSlidingHeadings(string colour, StringBuilder builder)
@@ -139,14 +150,20 @@ namespace Chess.Featuriser
                 builder.Append(FormatEntry(entry)).Append(", ");
             }
 
-            foreach (var value in state.WhiteSlidingPieceMobility)
+            foreach (var array in state.WhiteSlidingPieceMobility)
             {
-                builder.Append(value).Append(", ");
+                foreach (var value in array)
+                {
+                    builder.Append(value).Append(", ");
+                }
             }
 
-            foreach (var value in state.BlackSlidingPieceMobility)
+            foreach (var array in state.BlackSlidingPieceMobility)
             {
-                builder.Append(value).Append(", ");
+                foreach (var value in array)
+                {
+                    builder.Append(value).Append(", ");
+                }
             }
 
             foreach (var pieceType in state.WhiteAttackMap)
