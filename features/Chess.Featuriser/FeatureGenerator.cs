@@ -33,7 +33,9 @@ namespace Chess.Featuriser
 
         private void PopulateMaterialCount(BoardState state, Dictionary<PieceType, int> materialCount, bool isWhite)
         {
-            foreach (PieceType pieceType in Enum.GetValues(typeof(PieceType)))
+            foreach (PieceType pieceType in Enum.GetValues(typeof(PieceType))
+                .Cast<PieceType>()
+                .Where(x => x != PieceType.Count && x != PieceType.NoPiece))
             {
                 materialCount[pieceType] = state
                     .Flatten()
@@ -79,7 +81,7 @@ namespace Chess.Featuriser
                 slidingPieceMobility[i] = new List<int>();
 
                 var entry = pieceList[i];
-                
+
                 if (IsDiagonalSlider((PieceListIndex)i))
                 {
                     if (entry.IsPresent)

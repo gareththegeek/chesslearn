@@ -8,6 +8,7 @@
         Bishop,
         Rook,
         Queen,
-        King
+        King,
+        Count
     }
 }

@@ -10,32 +10,60 @@ namespace Chess.Featuriser
     {
         public static void Main(string[] args)
         {
-            Banner.Print("Chess Featuriser");
-
-            var options = new Configurator<Options>().BuildOptions(args);
-
-            if (options == null)
+            try
             {
-                return;
+                Banner.Print("Chess Featuriser");
+
+                var options = new Configurator<Options>().BuildOptions(args);
+
+                if (options == null)
+                {
+                    return;
+                }
+
+                var startTime = DateTime.Now;
+
+                Console.WriteLine("Scanning pgn text");
+                IEnumerable<PgnToken> tokens;
+                using (var stream = new FileStream(options.PgnFile, FileMode.Open))
+                {
+                    var scanner = new PgnScanner();
+                    tokens = scanner.Scan(stream).ToList();
+                }
+                Console.WriteLine($"Scanned {tokens.Count()} tokens in {(DateTime.Now - startTime).TotalSeconds}s");
+                startTime = DateTime.Now;
+
+                Console.WriteLine("Parsing pgn games");
+                var parser = new PgnParser();
+                var games = parser.Parse(tokens);
+                Console.WriteLine($"Parsed {games.Count()} games in {(DateTime.Now - startTime).TotalSeconds}s");
+
+                if (options.Debug)
+                {
+                    Debug(games);
+                }
+
+                if (options.Output)
+                {
+                    using (var stream = new FileStream(options.OutputFile, FileMode.OpenOrCreate, FileAccess.Write))
+                    {
+                        var stateSerialiser = new StateSerialiser();
+                        stateSerialiser.Serialise(games, stream);
+                        Console.WriteLine($"Wrote features file: {options.OutputFile}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ConsoleHelper.PrintError($"Unexpected error: {ex.Message}");
             }
 
-            var startTime = DateTime.Now;
+            Console.WriteLine("Press enter to quit");
+            Console.ReadLine();
+        }
 
-            Console.WriteLine("Scanning pgn text");
-            IEnumerable<PgnToken> tokens;
-            using (var stream = new FileStream(options.PgnFile, FileMode.Open))
-            {
-                var scanner = new PgnScanner();
-                tokens = scanner.Scan(stream).ToList();
-            }
-            Console.WriteLine($"Scanned {tokens.Count()} tokens in {(DateTime.Now - startTime).TotalSeconds}s");
-            startTime = DateTime.Now;
-
-            Console.WriteLine("Parsing pgn games");
-            var parser = new PgnParser();
-            var games = parser.Parse(tokens);
-            Console.WriteLine($"Parsed {games.Count()} games in {(DateTime.Now - startTime).TotalSeconds}s");
-
+        private static void Debug(IEnumerable<PgnGame> games)
+        {
             Console.WriteLine("Enter game number (1-" + games.Count() + ")");
             var n = int.Parse(Console.ReadLine());
 
@@ -47,10 +75,6 @@ namespace Chess.Featuriser
 
             var fenSerialiser = new FenSerialiser();
             var featureGenerator = new FeatureGenerator();
-
-            //var fens = states.Select(state => fenSerialiser.Serialise(state)).ToList();
-
-            //var fen = new FenSerialiser().Serialise(new BoardState());
 
             Console.OutputEncoding = System.Text.Encoding.Unicode;
             Console.Clear();
@@ -96,8 +120,6 @@ namespace Chess.Featuriser
                 Console.WriteLine(movestring);
                 Console.WriteLine();
             }
-
-            Console.ReadLine();
         }
 
         private class ColouredValue
@@ -179,7 +201,7 @@ namespace Chess.Featuriser
                 Console.Write(((PieceListIndex)i).ToPieceType().ToString().Substring(0, 1) + "  ");
             }
             Console.WriteLine();
-            
+
             for (var i = 0; i < (int)PieceListIndex.Count; i++)
             {
                 if (!pieceList[i].IsPresent)
@@ -202,8 +224,8 @@ namespace Chess.Featuriser
         {
             Console.ForegroundColor = colour;
             Console.BackgroundColor = ConsoleColor.Gray;
-            
-            for (var i = 0; i < (int) PieceListIndex.SlidingPieceCount; i++)
+
+            for (var i = 0; i < (int)PieceListIndex.SlidingPieceCount; i++)
             {
                 Console.Write(((PieceListIndex)i).ToPieceType().ToString().PadRight(7));
 
