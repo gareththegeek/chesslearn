@@ -54,7 +54,7 @@ namespace Chess.Featuriser
             return true;
         }
 
-        public static BoardState Move(this BoardState boardState, Piece piece, Square destination)
+        public static BoardState MakeMove(this BoardState boardState, Piece piece, Square destination)
         {
             var next = boardState.Clone();
             next.Squares[piece.Square.Rank, piece.Square.File] = null;
@@ -123,7 +123,7 @@ namespace Chess.Featuriser
                 return true;
             }
 
-            var nextState = state.Move(piece, new Square(target.Rank, target.File));
+            var nextState = state.MakeMove(piece, new Square(target.Rank, target.File));
             return !nextState.IsInCheck();
         }
 

@@ -7,6 +7,8 @@ namespace Chess.Featuriser
 {
     public class StateSerialiser
     {
+        private const string Delimeter = ",";
+
         public void Serialise(IEnumerable<PgnGame> games, Stream stream)
         {
             var stateGenerator = new PgnStateGenerator();
@@ -31,16 +33,17 @@ namespace Chess.Featuriser
         {
             var builder = new StringBuilder();
 
-            builder.Append("Fen").Append(", ");
-            builder.Append("IsW").Append(", ");
-            builder.Append("W0-0").Append(", ");
-            builder.Append("W0-0-0").Append(", ");
-            builder.Append("B0-0").Append(", ");
-            builder.Append("B0-0-0").Append(", ");
-            builder.Append("Move").Append(", ");
-            builder.Append("HalfMove").Append(", ");
-            builder.Append("EpFile").Append(", ");
-            builder.Append("EpRank").Append(", ");
+            builder.Append("Move").Append(Delimeter);
+            builder.Append("Fen").Append(Delimeter);
+            builder.Append("IsW").Append(Delimeter);
+            builder.Append("W0-0").Append(Delimeter);
+            builder.Append("W0-0-0").Append(Delimeter);
+            builder.Append("B0-0").Append(Delimeter);
+            builder.Append("B0-0-0").Append(Delimeter);
+            builder.Append("Move").Append(Delimeter);
+            builder.Append("HalfMove").Append(Delimeter);
+            builder.Append("EpFile").Append(Delimeter);
+            builder.Append("EpRank").Append(Delimeter);
 
             WritePieceCountHeadings("W", builder);
             WritePieceCountHeadings("B", builder);
@@ -54,6 +57,8 @@ namespace Chess.Featuriser
             WriteAttackMapHeadings("W", builder);
             WriteAttackMapHeadings("B", builder);
 
+            builder.Remove(builder.Length - 1, 1);
+
             sw.WriteLine(builder.ToString());
         }
 
@@ -66,7 +71,7 @@ namespace Chess.Featuriser
             {
                 foreach (var file in files)
                 {
-                    builder.Append($"{colour}A{file}{rank}").Append(", ");
+                    builder.Append($"{colour}A{file}{rank}").Append(Delimeter);
                 }
             }
         }
@@ -80,7 +85,7 @@ namespace Chess.Featuriser
             {
                 for (var i = 0; i < length; i++)
                 {
-                    builder.Append($"{colour}{piece}S{i}").Append(", ");
+                    builder.Append($"{colour}{piece}S{i}").Append(Delimeter);
                 }
 
                 length = 4;
@@ -89,14 +94,14 @@ namespace Chess.Featuriser
 
         private static void WritePieceListHeadings(string colour, StringBuilder builder)
         {
-            var pieces = new[] { "Pa", "Pb", "Pc", "Pd", "Pe", "Pf", "Pg", "Ph", "QR", "QN", "QB", "Q", "K", "KB", "KN", "KR" };
+            var pieces = new[] { "Q", "QR", "KR", "QB", "KB", "K", "QN", "KN", "Pa", "Pb", "Pc", "Pd", "Pe", "Pf", "Pg", "Ph" };
             foreach (var piece in pieces)
             {
-                builder.Append($"{colour}{piece}Present").Append(", ");
-                builder.Append($"{colour}{piece}File").Append(", ");
-                builder.Append($"{colour}{piece}Rank").Append(", ");
-                builder.Append($"{colour}{piece}LVA").Append(", ");
-                builder.Append($"{colour}{piece}LVD").Append(", ");
+                builder.Append($"{colour}{piece}Present").Append(Delimeter);
+                builder.Append($"{colour}{piece}File").Append(Delimeter);
+                builder.Append($"{colour}{piece}Rank").Append(Delimeter);
+                builder.Append($"{colour}{piece}LVA").Append(Delimeter);
+                builder.Append($"{colour}{piece}LVD").Append(Delimeter);
             }
         }
 
@@ -106,7 +111,7 @@ namespace Chess.Featuriser
 
             foreach (var piece in pieces)
             {
-                builder.Append($"{colour}{piece}Count").Append(", ");
+                builder.Append($"{colour}{piece}Count").Append(Delimeter);
             }
         }
 
@@ -114,47 +119,48 @@ namespace Chess.Featuriser
         {
             var builder = new StringBuilder();
 
+            builder.Append(state.Move?.ToString()).Append(Delimeter);
+
             var fenSerialiser = new FenSerialiser();
             var fen = fenSerialiser.Serialise(state);
 
-            builder.Append(fen).Append(", ");
+            builder.Append(fen).Append(Delimeter);
 
             builder
-                .Append(FormatBoolean(state.IsWhite)).Append(", ")
-                .Append(FormatBoolean(state.WhiteCastleShort)).Append(", ")
-                .Append(FormatBoolean(state.WhiteCastleLong)).Append(", ")
-                .Append(FormatBoolean(state.BlackCastleShort)).Append(", ")
-                .Append(FormatBoolean(state.BlackCastleLong)).Append(", ")
-                .Append(state.MoveNumber).Append(", ")
-                .Append(state.HalfMoveClock).Append(", ")
-                .Append(FormatSquare(state.EnPassantTarget)).Append(", ");
+                .Append(FormatBoolean(state.IsWhite)).Append(Delimeter)
+                .Append(FormatBoolean(state.WhiteCastleShort)).Append(Delimeter)
+                .Append(FormatBoolean(state.WhiteCastleLong)).Append(Delimeter)
+                .Append(FormatBoolean(state.BlackCastleShort)).Append(Delimeter)
+                .Append(FormatBoolean(state.BlackCastleLong)).Append(Delimeter)
+                .Append(state.MoveNumber).Append(Delimeter)
+                .Append(state.HalfMoveClock).Append(Delimeter)
+                .Append(FormatSquare(state.EnPassantTarget)).Append(Delimeter);
 
             foreach (var key in state.WhiteMaterialCount.Keys)
             {
-                builder.Append(state.WhiteMaterialCount[key]).Append(", ");
+                builder.Append(state.WhiteMaterialCount[key]).Append(Delimeter);
             }
 
             foreach (var key in state.BlackMaterialCount.Keys)
             {
-                builder.Append(state.BlackMaterialCount[key]).Append(", ");
+                builder.Append(state.BlackMaterialCount[key]).Append(Delimeter);
             }
             // TODO There is a problem with the piece list, for example queen square's lowest value defender is 4(queen) but should be 5(king)
-            // TODO Confirm order of piece export - csv ordering is confusing..
             foreach (var entry in state.WhitePieceList)
             {
-                builder.Append(FormatEntry(entry)).Append(", ");
+                builder.Append(FormatEntry(entry)).Append(Delimeter);
             }
 
             foreach (var entry in state.BlackPieceList)
             {
-                builder.Append(FormatEntry(entry)).Append(", ");
+                builder.Append(FormatEntry(entry)).Append(Delimeter);
             }
 
             foreach (var array in state.WhiteSlidingPieceMobility)
             {
                 foreach (var value in array)
                 {
-                    builder.Append(value).Append(", ");
+                    builder.Append(value).Append(Delimeter);
                 }
             }
 
@@ -162,32 +168,32 @@ namespace Chess.Featuriser
             {
                 foreach (var value in array)
                 {
-                    builder.Append(value).Append(", ");
+                    builder.Append(value).Append(Delimeter);
                 }
             }
 
             foreach (var pieceType in state.WhiteAttackMap)
             {
-                builder.Append(FormatPieceType(pieceType)).Append(", ");
+                builder.Append(FormatPieceType(pieceType)).Append(Delimeter);
             }
 
             foreach (var pieceType in state.BlackAttackMap)
             {
-                builder.Append(FormatPieceType(pieceType)).Append(", ");
+                builder.Append(FormatPieceType(pieceType)).Append(Delimeter);
             }
 
-            builder.Remove(builder.Length - 2, 2);
+            builder.Remove(builder.Length-1, 1);
 
             sw.WriteLine(builder.ToString());
         }
 
         private string FormatBoolean(bool value) => value ? "1" : "0";
-        private string FormatSquare(Square square) => square == null ? "8, 8" : square.File + ", " + square.Rank;
+        private string FormatSquare(Square square) => square == null ? "8, 8" : square.File + Delimeter + square.Rank;
         private string FormatPieceType(PieceType pieceType) => ((int)pieceType).ToString();
         private string FormatEntry(PieceListEntry entry) =>
-            FormatBoolean(entry.IsPresent) + ", " +
-            FormatSquare(entry.Square) + ", " +
-            FormatPieceType(entry.LowestValueAttacker) + ", " +
+            FormatBoolean(entry.IsPresent) + Delimeter +
+            FormatSquare(entry.Square) + Delimeter +
+            FormatPieceType(entry.LowestValueAttacker) + Delimeter +
             FormatPieceType(entry.LowestValueDefender);
     }
 }

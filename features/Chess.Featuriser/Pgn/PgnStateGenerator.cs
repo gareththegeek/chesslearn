@@ -32,6 +32,7 @@ namespace Chess.Featuriser.Pgn
 
         private void ApplyMove(BoardState boardState, PgnMove move)
         {
+            boardState.Move = move;
             boardState.EnPassantTarget = null;
 
             if ((move.Flags & (int)PgnMoveFlags.Castle) != 0)
@@ -151,7 +152,7 @@ namespace Chess.Featuriser.Pgn
 
             if (doubleMove)
             {
-                boardState.EnPassantTarget = new Square(square.File, square.Rank + direction);
+                boardState.EnPassantTarget = new Square(square.Rank + direction, square.File);
             }
 
             return pawns.Single().Square;
@@ -297,7 +298,7 @@ namespace Chess.Featuriser.Pgn
         {
             boardState.IsWhite = !boardState.IsWhite;
             boardState.MoveNumber += boardState.IsWhite ? 1 : 0;
-            boardState.HalfMoveClock += 1;
+            boardState.HalfMoveClock = boardState.IsWhite ? 0 : 1;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Chess.Featuriser.Pgn;
+using System;
 using System.Collections.Generic;
 
 namespace Chess.Featuriser
@@ -79,6 +80,7 @@ namespace Chess.Featuriser
 
         protected BoardState(BoardState original)
         {
+            Move = original.Move;
             IsWhite = original.IsWhite;
             WhiteCastleShort = original.WhiteCastleShort;
             WhiteCastleLong = original.WhiteCastleLong;
@@ -97,6 +99,8 @@ namespace Chess.Featuriser
                 }
             }
         }
+
+        public PgnMove Move { get; set; }
 
         public bool IsWhite { get; set; }
         public bool WhiteCastleShort { get; set; }

@@ -45,7 +45,7 @@ namespace Chess.Featuriser
 
                 if (options.Output)
                 {
-                    using (var stream = new FileStream(options.OutputFile, FileMode.OpenOrCreate, FileAccess.Write))
+                    using (var stream = new FileStream(options.OutputFile, FileMode.Create, FileAccess.Write))
                     {
                         var stateSerialiser = new StateSerialiser();
                         stateSerialiser.Serialise(games, stream);
