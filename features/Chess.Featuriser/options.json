@@ -1,7 +1,8 @@
 ﻿{
-  "PgnFile": "simple.pgn",
-  "Output": true,
-  "OutputFile": "outfile.csv"
-    //,"Debug":  true
+  "input": "simple.pgn",
+  "output": "outfile.csv",
+  "fen": true,
+  //"features": true,
+  //"debug": true,
   //"PgnFile": "KingBaseLite2016-03-A00-A39.pgn"
 }

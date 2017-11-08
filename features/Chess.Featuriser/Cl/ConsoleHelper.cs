@@ -1,7 +1,7 @@
 ﻿using System;
 using CommandLine.Text;
 
-namespace Chess.Featuriser
+namespace Chess.Featuriser.Cl
 {
     public static class ConsoleHelper
     {

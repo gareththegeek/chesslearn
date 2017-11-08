@@ -4,6 +4,7 @@ using Chess.Featuriser.Pgn;
 using System.Text;
 using Chess.Featuriser.Features;
 using Chess.Featuriser.Fen;
+using System;
 
 namespace Chess.Featuriser.State
 {
@@ -11,53 +12,66 @@ namespace Chess.Featuriser.State
     {
         private const string Delimeter = ",";
 
-        public void Serialise(IEnumerable<PgnGame> games, Stream stream)
+        public void Serialise(IEnumerable<PgnGame> games, Stream stream, bool features, bool fen)
         {
+            if (!features && !fen) throw new ArgumentException("Must specify features or fen to seriliase");
+
             var stateGenerator = new PgnStateGenerator();
             var featureGenerator = new FeatureGenerator();
 
             using (var sw = new StreamWriter(stream))
             {
-                WriteHeadings(sw);
+                WriteHeadings(sw, features, fen);
 
                 foreach (var game in games)
                 {
                     foreach (var state in stateGenerator.GenerateStates(game))
                     {
-                        featureGenerator.PopulateFeatures(state);
-                        Serialise(state, sw);
+                        if (features)
+                        {
+                            featureGenerator.PopulateFeatures(state);
+                        }
+                        Serialise(state, sw, features, fen);
                     }
                 }
             }
         }
 
-        private void WriteHeadings(StreamWriter sw)
+        private void WriteHeadings(StreamWriter sw, bool features, bool fen)
         {
             var builder = new StringBuilder();
 
-            builder.Append("Move").Append(Delimeter);
-            builder.Append("Fen").Append(Delimeter);
-            builder.Append("IsW").Append(Delimeter);
-            builder.Append("W0-0").Append(Delimeter);
-            builder.Append("W0-0-0").Append(Delimeter);
-            builder.Append("B0-0").Append(Delimeter);
-            builder.Append("B0-0-0").Append(Delimeter);
-            builder.Append("Move").Append(Delimeter);
-            builder.Append("HalfMove").Append(Delimeter);
-            builder.Append("EpFile").Append(Delimeter);
-            builder.Append("EpRank").Append(Delimeter);
+            //TODO support uci output
+            //builder.Append("Move").Append(Delimeter);
+            if (fen)
+            {
+                builder.Append("Fen").Append(Delimeter);
+            }
 
-            WritePieceCountHeadings("W", builder);
-            WritePieceCountHeadings("B", builder);
+            if (features)
+            {
+                builder.Append("IsW").Append(Delimeter);
+                builder.Append("W0-0").Append(Delimeter);
+                builder.Append("W0-0-0").Append(Delimeter);
+                builder.Append("B0-0").Append(Delimeter);
+                builder.Append("B0-0-0").Append(Delimeter);
+                builder.Append("Move").Append(Delimeter);
+                builder.Append("HalfMove").Append(Delimeter);
+                builder.Append("EpFile").Append(Delimeter);
+                builder.Append("EpRank").Append(Delimeter);
 
-            WritePieceListHeadings("W", builder);
-            WritePieceListHeadings("B", builder);
+                WritePieceCountHeadings("W", builder);
+                WritePieceCountHeadings("B", builder);
 
-            WriteSlidingHeadings("W", builder);
-            WriteSlidingHeadings("B", builder);
+                WritePieceListHeadings("W", builder);
+                WritePieceListHeadings("B", builder);
 
-            WriteAttackMapHeadings("W", builder);
-            WriteAttackMapHeadings("B", builder);
+                WriteSlidingHeadings("W", builder);
+                WriteSlidingHeadings("B", builder);
+
+                WriteAttackMapHeadings("W", builder);
+                WriteAttackMapHeadings("B", builder);
+            }
 
             builder.Remove(builder.Length - 1, 1);
 
@@ -117,17 +131,33 @@ namespace Chess.Featuriser.State
             }
         }
 
-        private void Serialise(BoardState state, StreamWriter sw)
+        private void Serialise(BoardState state, StreamWriter sw, bool features, bool fen)
         {
             var builder = new StringBuilder();
 
-            builder.Append(state.Move?.ToString()).Append(Delimeter);
+            //TODO support UCI output
+            //builder.Append(state.Move?.ToString()).Append(Delimeter);
 
-            var fenSerialiser = new FenSerialiser();
-            var fen = fenSerialiser.Serialise(state);
+            if (fen)
+            {
+                var fenSerialiser = new FenSerialiser();
+                
+                var fenValue = fenSerialiser.Serialise(state);
+                builder.Append(fenValue).Append(Delimeter);
+            }
 
-            builder.Append(fen).Append(Delimeter);
+            if (features)
+            {
+                AppendFeatures(state, builder);
+            }
 
+            builder.Remove(builder.Length-1, 1);
+
+            sw.WriteLine(builder.ToString());
+        }
+
+        private void AppendFeatures(BoardState state, StringBuilder builder)
+        {
             builder
                 .Append(FormatBoolean(state.IsWhite)).Append(Delimeter)
                 .Append(FormatBoolean(state.WhiteCastleShort)).Append(Delimeter)
@@ -183,10 +213,6 @@ namespace Chess.Featuriser.State
             {
                 builder.Append(FormatPieceType(pieceType)).Append(Delimeter);
             }
-
-            builder.Remove(builder.Length-1, 1);
-
-            sw.WriteLine(builder.ToString());
         }
 
         private string FormatBoolean(bool value) => value ? "1" : "0";

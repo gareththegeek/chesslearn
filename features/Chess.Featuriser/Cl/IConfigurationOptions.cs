@@ -1,4 +1,4 @@
-﻿namespace Chess.Featuriser
+﻿namespace Chess.Featuriser.Cl
 {
     public interface IConfigurationOptions
     {

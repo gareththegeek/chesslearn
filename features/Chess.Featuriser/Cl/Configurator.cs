@@ -3,7 +3,7 @@ using System.IO;
 using CommandLine;
 using Newtonsoft.Json;
 
-namespace Chess.Featuriser
+namespace Chess.Featuriser.Cl
 {
     public class Configurator<T> where T : class, IConfigurationOptions, new()
     {
