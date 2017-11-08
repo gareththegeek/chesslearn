@@ -2,8 +2,10 @@
 using System.IO;
 using Chess.Featuriser.Pgn;
 using System.Text;
+using Chess.Featuriser.Features;
+using Chess.Featuriser.Fen;
 
-namespace Chess.Featuriser
+namespace Chess.Featuriser.State
 {
     public class StateSerialiser
     {

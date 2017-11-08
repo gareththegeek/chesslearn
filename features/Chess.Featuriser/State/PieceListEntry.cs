@@ -1,4 +1,4 @@
-﻿namespace Chess.Featuriser
+﻿namespace Chess.Featuriser.State
 {
     public class PieceListEntry
     {

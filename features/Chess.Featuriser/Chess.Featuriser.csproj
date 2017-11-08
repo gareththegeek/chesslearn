@@ -53,12 +53,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Banner.cs" />
-    <Compile Include="BoardStateExtensions.cs" />
-    <Compile Include="BoardState.cs" />
+    <Compile Include="State\BoardStateExtensions.cs" />
+    <Compile Include="State\BoardState.cs" />
     <Compile Include="Configurator.cs" />
     <Compile Include="ConsoleHelper.cs" />
-    <Compile Include="FeatureGenerator.cs" />
-    <Compile Include="FenSerialiser.cs" />
+    <Compile Include="Features\FeatureGenerator.cs" />
+    <Compile Include="Fen\FenSerialiser.cs" />
     <Compile Include="IConfigurationOptions.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="Pgn\PgnSquareExtensions.cs" />
@@ -70,17 +70,17 @@
     <Compile Include="Pgn\PgnScanner.cs" />
     <Compile Include="Pgn\PgnToken.cs" />
     <Compile Include="Pgn\PgnTokenType.cs" />
-    <Compile Include="Piece.cs" />
-    <Compile Include="PieceListEntry.cs" />
-    <Compile Include="PieceListIndex.cs" />
-    <Compile Include="PieceListIndexExtensions.cs" />
+    <Compile Include="State\Piece.cs" />
+    <Compile Include="State\PieceListEntry.cs" />
+    <Compile Include="State\PieceListIndex.cs" />
+    <Compile Include="State\PieceListIndexExtensions.cs" />
     <Compile Include="PieceType.cs" />
-    <Compile Include="PieceExtensions.cs" />
+    <Compile Include="State\PieceExtensions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Pgn\PgnSquare.cs" />
     <Compile Include="Square.cs" />
-    <Compile Include="StateSerialiser.cs" />
+    <Compile Include="State\StateSerialiser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

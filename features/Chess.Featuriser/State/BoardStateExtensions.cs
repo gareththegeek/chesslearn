@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Chess.Featuriser
+namespace Chess.Featuriser.State
 {
     public static class BoardStateExtensions
     {

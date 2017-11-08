@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using Chess.Featuriser.State;
+using System.Collections.Generic;
 using System.Text;
 
-namespace Chess.Featuriser
+namespace Chess.Featuriser.Fen
 {
     public class FenSerialiser
     {

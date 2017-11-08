@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Chess.Featuriser
+namespace Chess.Featuriser.State
 {
     public class BoardState
     {

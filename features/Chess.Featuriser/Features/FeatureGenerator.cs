@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Chess.Featuriser.State;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Chess.Featuriser
+namespace Chess.Featuriser.Features
 {
     public class FeatureGenerator
     {

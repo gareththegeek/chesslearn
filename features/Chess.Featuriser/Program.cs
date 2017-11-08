@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Chess.Featuriser.Pgn;
+using Chess.Featuriser.State;
+using Chess.Featuriser.Fen;
+using Chess.Featuriser.Features;
 
 namespace Chess.Featuriser
 {

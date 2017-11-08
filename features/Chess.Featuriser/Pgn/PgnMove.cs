@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using Chess.Featuriser.State;
+using System.Text;
 
 namespace Chess.Featuriser.Pgn
 {

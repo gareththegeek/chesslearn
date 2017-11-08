@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Chess.Featuriser.State;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
