@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Threading;
 
-namespace Chess.Featuriser.Cl
+namespace Chess.Featuriser.Cli
 {
     public static class Banner
     {

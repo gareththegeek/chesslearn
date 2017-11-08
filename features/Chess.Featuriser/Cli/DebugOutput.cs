@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Chess.Featuriser.Cl
+namespace Chess.Featuriser.Cli
 {
     public class DebugOutput
     {

@@ -6,7 +6,7 @@ using Chess.Featuriser.Features;
 using Chess.Featuriser.Fen;
 using System;
 using Chess.Featuriser.State;
-using Chess.Featuriser.Cl;
+using Chess.Featuriser.Cli;
 
 namespace Chess.Featuriser
 {

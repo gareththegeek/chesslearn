@@ -1,4 +1,5 @@
-﻿using Chess.Featuriser.Cl;
+﻿using Chess.Featuriser.Cli;
+using Chess.Featuriser.Fen;
 using Chess.Featuriser.Pgn;
 using Chess.Featuriser.State;
 using System;
@@ -37,7 +38,6 @@ namespace Chess.Featuriser
             IEnumerable<PgnToken> tokens;
             using (var stream = new FileStream(options.Input, FileMode.Open))
             {
-                //TODO support csv fen input not just pgn
                 var scanner = new PgnScanner();
                 tokens = scanner.Scan(stream).ToList();
             }
@@ -70,7 +70,25 @@ namespace Chess.Featuriser
 
         private IEnumerable<BoardState> DeserialiseCsv(Options options)
         {
-            throw new NotImplementedException(".csv input file type is not yet implemented");
+            //TODO include score column in board state
+            //TODO add score column as option at CLI?
+
+            var startTime = DateTime.Now;
+
+            Console.WriteLine("Scanning csv text");
+            IEnumerable<string> fens;
+            using (var stream = new FileStream(options.Input, FileMode.Open, FileAccess.Read))
+            {
+                var scanner = new CsvScanner();
+                fens = scanner.Scan(stream);
+            }
+            Console.WriteLine($"Read {fens.Count()} fens in {(DateTime.Now - startTime).TotalSeconds}s");
+            startTime = DateTime.Now;
+
+            Console.WriteLine("Generating state information");
+            //TODO implement a FenStateGenerator to generate states from fens
+
+            throw new NotImplementedException("Csv fen deserialisation is not yet complete");
         }
     }
 }

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using Chess.Featuriser.Pgn;
-using Chess.Featuriser.Cl;
+using Chess.Featuriser.Cli;
 
 namespace Chess.Featuriser
 {

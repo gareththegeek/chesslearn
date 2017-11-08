@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using CommandLine;
 
-namespace Chess.Featuriser.Cl
+namespace Chess.Featuriser.Cli
 {
     public class Options: IConfigurationOptions
     {

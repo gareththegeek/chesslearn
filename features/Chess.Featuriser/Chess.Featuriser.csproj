@@ -52,17 +52,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cl\Banner.cs" />
-    <Compile Include="Cl\DebugOutput.cs" />
+    <Compile Include="Cli\Banner.cs" />
+    <Compile Include="Cli\DebugOutput.cs" />
+    <Compile Include="Fen\CsvScanner.cs" />
     <Compile Include="InputDeserialiser.cs" />
     <Compile Include="State\BoardStateExtensions.cs" />
     <Compile Include="State\BoardState.cs" />
-    <Compile Include="Cl\Configurator.cs" />
-    <Compile Include="Cl\ConsoleHelper.cs" />
+    <Compile Include="Cli\Configurator.cs" />
+    <Compile Include="Cli\ConsoleHelper.cs" />
     <Compile Include="Features\FeatureGenerator.cs" />
     <Compile Include="Fen\FenSerialiser.cs" />
-    <Compile Include="Cl\IConfigurationOptions.cs" />
-    <Compile Include="Cl\Options.cs" />
+    <Compile Include="Cli\IConfigurationOptions.cs" />
+    <Compile Include="Cli\Options.cs" />
     <Compile Include="Pgn\PgnSquareExtensions.cs" />
     <Compile Include="Pgn\PgnStateGenerator.cs" />
     <Compile Include="Pgn\PgnGame.cs" />
