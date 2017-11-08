@@ -14,10 +14,24 @@ namespace Chess.Featuriser
 
         public IEnumerable<BoardState> Deserialise(Options options)
         {
-            var startTime = DateTime.Now;
-
             Console.WriteLine("");
             Console.WriteLine("Deserialising input");
+
+            var extension = Path.GetExtension(options.Input).ToLower();
+            switch (extension)
+            {
+                case ".pgn":
+                    return DeserialisePgn(options);
+                case ".csv":
+                    return DeserialiseCsv(options);
+                default:
+                    throw new InvalidOperationException($"Unknown input file extension {extension}");
+            }
+        }
+
+        private IEnumerable<BoardState> DeserialisePgn(Options options)
+        {
+            var startTime = DateTime.Now;
 
             Console.WriteLine("Scanning pgn text");
             IEnumerable<PgnToken> tokens;
@@ -52,6 +66,11 @@ namespace Chess.Featuriser
             Console.WriteLine($"Processed states. {states.Count} states in {(DateTime.Now - startTime).TotalSeconds}s");
 
             return states;
+        }
+
+        private IEnumerable<BoardState> DeserialiseCsv(Options options)
+        {
+            throw new NotImplementedException(".csv input file type is not yet implemented");
         }
     }
 }
