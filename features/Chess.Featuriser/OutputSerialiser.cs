@@ -5,50 +5,68 @@ using System.Text;
 using Chess.Featuriser.Features;
 using Chess.Featuriser.Fen;
 using System;
+using Chess.Featuriser.State;
+using Chess.Featuriser.Cl;
 
-namespace Chess.Featuriser.State
+namespace Chess.Featuriser
 {
-    public class StateSerialiser
+    public class OutputSerialiser
     {
         private const string Delimeter = ",";
+        private const int ReportEvery = 10000;
 
-        public void Serialise(IEnumerable<PgnGame> games, Stream stream, bool features, bool fen)
+        public void Serialise(IEnumerable<PgnGame> games, Options options)
         {
-            if (!features && !fen) throw new ArgumentException("Must specify features or fen to seriliase");
+            if (!options.Features && !options.Fen) throw new ArgumentException("Must specify features or fen to seriliase");
 
-            var stateGenerator = new PgnStateGenerator();
-            var featureGenerator = new FeatureGenerator();
+            var startTime = DateTime.Now;
+            Console.WriteLine("Serialising output");
 
-            using (var sw = new StreamWriter(stream))
+            var i = 0;
+
+            using (var stream = new FileStream(options.Output, FileMode.Create, FileAccess.Write))
             {
-                WriteHeadings(sw, features, fen);
+                var stateGenerator = new PgnStateGenerator();
+                var featureGenerator = new FeatureGenerator();
 
-                foreach (var game in games)
+                using (var sw = new StreamWriter(stream))
                 {
-                    foreach (var state in stateGenerator.GenerateStates(game))
+                    WriteHeadings(sw, options);
+
+                    foreach (var game in games)
                     {
-                        if (features)
+                        foreach (var state in stateGenerator.GenerateStates(game))
                         {
-                            featureGenerator.PopulateFeatures(state);
+                            if (options.Features)
+                            {
+                                featureGenerator.PopulateFeatures(state);
+                            }
+                            Serialise(state, sw, options);
+
+                            if (i++ % ReportEvery == 0)
+                            {
+                                Console.WriteLine($"Serialised {i} states in {(DateTime.Now - startTime).TotalSeconds}s");
+                            }
                         }
-                        Serialise(state, sw, features, fen);
                     }
                 }
             }
+
+            Console.WriteLine($"Wrote output file: {options.Output} - {i} states in {(DateTime.Now - startTime).TotalSeconds}s");
         }
 
-        private void WriteHeadings(StreamWriter sw, bool features, bool fen)
+        private void WriteHeadings(StreamWriter sw, Options options)
         {
             var builder = new StringBuilder();
 
             //TODO support uci output
             //builder.Append("Move").Append(Delimeter);
-            if (fen)
+            if (options.Fen)
             {
                 builder.Append("Fen").Append(Delimeter);
             }
 
-            if (features)
+            if (options.Features)
             {
                 builder.Append("IsW").Append(Delimeter);
                 builder.Append("W0-0").Append(Delimeter);
@@ -131,27 +149,27 @@ namespace Chess.Featuriser.State
             }
         }
 
-        private void Serialise(BoardState state, StreamWriter sw, bool features, bool fen)
+        private void Serialise(BoardState state, StreamWriter sw, Options options)
         {
             var builder = new StringBuilder();
 
             //TODO support UCI output
             //builder.Append(state.Move?.ToString()).Append(Delimeter);
 
-            if (fen)
+            if (options.Fen)
             {
                 var fenSerialiser = new FenSerialiser();
-                
+
                 var fenValue = fenSerialiser.Serialise(state);
                 builder.Append(fenValue).Append(Delimeter);
             }
 
-            if (features)
+            if (options.Features)
             {
                 AppendFeatures(state, builder);
             }
 
-            builder.Remove(builder.Length-1, 1);
+            builder.Remove(builder.Length - 1, 1);
 
             sw.WriteLine(builder.ToString());
         }

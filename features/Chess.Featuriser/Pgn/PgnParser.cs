@@ -6,6 +6,8 @@ namespace Chess.Featuriser.Pgn
 {
     public class PgnParser
     {
+        private const int ReportEvery = 1000;
+
         private IEnumerator<PgnToken> enumerator;
         private ICollection<PgnGame> games;
 
@@ -26,7 +28,7 @@ namespace Chess.Featuriser.Pgn
                 {
                     games.Add(ParseGame());
 
-                    if (i++ % 1000 == 0)
+                    if (i++ % ReportEvery == 0)
                     {
                         Console.WriteLine($"Processed {i - 1} games");
                     }

@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="Cl\Banner.cs" />
     <Compile Include="Cl\DebugOutput.cs" />
+    <Compile Include="InputDeserialiser.cs" />
     <Compile Include="State\BoardStateExtensions.cs" />
     <Compile Include="State\BoardState.cs" />
     <Compile Include="Cl\Configurator.cs" />
@@ -81,7 +82,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Pgn\PgnSquare.cs" />
     <Compile Include="Square.cs" />
-    <Compile Include="State\StateSerialiser.cs" />
+    <Compile Include="OutputSerialiser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
