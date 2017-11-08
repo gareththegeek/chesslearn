@@ -21,17 +21,18 @@ namespace Chess.Featuriser
                 }
 
                 var inputDeserialiser = new InputDeserialiser();
-                IEnumerable<PgnGame> games = inputDeserialiser.Deserialise(options);
+                var states = inputDeserialiser.Deserialise(options);
 
-                if (options.Debug)
-                {
-                    DebugOutput.Debug(games);
-                }
+                //TODO if we no longer produce a list of PgnGames, how can we debug?
+                //if (options.Debug)
+                //{
+                //    DebugOutput.Debug(games);
+                //}
 
                 if (!string.IsNullOrEmpty(options.Output))
                 {
                     var outputSerialiser = new OutputSerialiser();
-                    outputSerialiser.Serialise(games, options);
+                    outputSerialiser.Serialise(states, options);
                 }
             }
             catch (Exception ex)

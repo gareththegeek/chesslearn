@@ -15,11 +15,12 @@ namespace Chess.Featuriser
         private const string Delimeter = ",";
         private const int ReportEvery = 10000;
 
-        public void Serialise(IEnumerable<PgnGame> games, Options options)
+        public void Serialise(IEnumerable<BoardState> states, Options options)
         {
             if (!options.Features && !options.Fen) throw new ArgumentException("Must specify features or fen to seriliase");
 
             var startTime = DateTime.Now;
+            Console.WriteLine();
             Console.WriteLine("Serialising output");
 
             var i = 0;
@@ -33,20 +34,17 @@ namespace Chess.Featuriser
                 {
                     WriteHeadings(sw, options);
 
-                    foreach (var game in games)
+                    foreach (var state in states)
                     {
-                        foreach (var state in stateGenerator.GenerateStates(game))
+                        if (options.Features)
                         {
-                            if (options.Features)
-                            {
-                                featureGenerator.PopulateFeatures(state);
-                            }
-                            Serialise(state, sw, options);
+                            featureGenerator.PopulateFeatures(state);
+                        }
+                        Serialise(state, sw, options);
 
-                            if (i++ % ReportEvery == 0)
-                            {
-                                Console.WriteLine($"Serialised {i} states in {(DateTime.Now - startTime).TotalSeconds}s");
-                            }
+                        if (i++ % ReportEvery == 0)
+                        {
+                            Console.WriteLine($"Serialised {i} states in {(DateTime.Now - startTime).TotalSeconds}s");
                         }
                     }
                 }

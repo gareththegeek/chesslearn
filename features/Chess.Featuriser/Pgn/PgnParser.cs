@@ -21,7 +21,7 @@ namespace Chess.Featuriser.Pgn
 
             games = new List<PgnGame>(tokensList.Count(x => x.Type == PgnTokenType.Result));
 
-            var i = 0;
+            var i = 1;
             while (enumerator.MoveNext())
             {
                 try
