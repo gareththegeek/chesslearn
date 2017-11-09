@@ -56,6 +56,7 @@ namespace Chess.Featuriser.Cli
                 movestring += state.Move;
                 Console.WriteLine(movestring);
                 Console.WriteLine();
+                i += 1;
             }
         }
 

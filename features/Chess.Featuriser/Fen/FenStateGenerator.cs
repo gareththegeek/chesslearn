@@ -25,15 +25,14 @@ namespace Chess.Featuriser.Fen
             HalfMoveClock,
             MoveNumber
         }
-
-        //rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
+        
         public IEnumerable<BoardState> Generate(IEnumerable<string> fens)
         {
-            pieceListIndexDictionary = new Dictionary<ColourPieceType, int>();
-
             var states = new List<BoardState>();
             foreach (var fen in fens)
             {
+                pieceListIndexDictionary = new Dictionary<ColourPieceType, int>();
+
                 var state = ParseFen(fen);
                 states.Add(state);
             }
@@ -75,7 +74,7 @@ namespace Chess.Featuriser.Fen
                     {
                         var piece = ParsePiece(current);
                         result.Squares[7 - rank, file] = piece;
-                        piece.Square = new Square(rank, file);
+                        piece.Square = new Square(7 - rank, file);
 
                         file += 1;
                     }
@@ -93,12 +92,9 @@ namespace Chess.Featuriser.Fen
             if (!pieceListIndexDictionary.TryGetValue(key, out int count))
             {
                 count = 0;
-                pieceListIndexDictionary[key] = count;
             }
-            else
-            {
-                pieceListIndexDictionary[key] = count + 1;
-            }
+
+            pieceListIndexDictionary[key] = count + 1;
 
             PieceListIndex pieceListIndex;
             switch (pieceType)
