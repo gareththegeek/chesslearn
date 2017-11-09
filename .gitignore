@@ -408,3 +408,5 @@ __pycache__/
 OpenCover/
 
 *.pgn
+*.csv
+*.xlsx
