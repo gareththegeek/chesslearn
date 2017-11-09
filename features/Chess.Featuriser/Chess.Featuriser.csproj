@@ -55,6 +55,7 @@
     <Compile Include="Cli\Banner.cs" />
     <Compile Include="Cli\DebugOutput.cs" />
     <Compile Include="Fen\CsvScanner.cs" />
+    <Compile Include="Fen\FenStateGenerator.cs" />
     <Compile Include="InputDeserialiser.cs" />
     <Compile Include="State\BoardStateExtensions.cs" />
     <Compile Include="State\BoardState.cs" />

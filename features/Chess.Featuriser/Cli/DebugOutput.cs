@@ -10,16 +10,10 @@ namespace Chess.Featuriser.Cli
 {
     public class DebugOutput
     {
-        public static void Debug(IEnumerable<PgnGame> games)
+        public static void Debug(IEnumerable<BoardState> states)
         {
-            Console.WriteLine("Enter game number (1-" + games.Count() + ")");
+            Console.WriteLine("Enter state number (1-" + states.Count() + ")");
             var n = int.Parse(Console.ReadLine());
-
-            var game = games.ElementAt(n - 1);
-
-            var text = game.ToString();
-
-            var states = new PgnStateGenerator().GenerateStates(game).ToList();
 
             var fenSerialiser = new FenSerialiser();
             var featureGenerator = new FeatureGenerator();
@@ -30,11 +24,12 @@ namespace Chess.Featuriser.Cli
             Console.WriteLine();
 
             var movestring = "";
-            var moveCount = game.Moves.Count;
 
-            var i = 0;
-            foreach (var state in states)
+            var i = n - 1;
+            while(i < states.Count())
             {
+                var state = states.ElementAt(i);
+
                 var fen = fenSerialiser.Serialise(state);
                 PrintFen(fen);
 
@@ -47,24 +42,18 @@ namespace Chess.Featuriser.Cli
 
                 PrintSlidingList(state.WhiteSlidingPieceMobility, ConsoleColor.White);
                 PrintSlidingList(state.BlackSlidingPieceMobility, ConsoleColor.Black);
-
-                if (i == moveCount)
-                {
-                    break;
-                }
-
-                var move = game.Moves.ElementAt(i++);
+                
                 Console.ReadLine();
                 Console.Clear();
-                if ((move.Flags & (int)PgnMoveFlags.IsWhite) != 0)
+                if (state.IsWhite)
                 {
-                    movestring = states[i].MoveNumber + ".";
+                    movestring = state.MoveNumber + ".";
                 }
                 else
                 {
                     movestring += " ..";
                 }
-                movestring += move.ToString();
+                movestring += state.Move;
                 Console.WriteLine(movestring);
                 Console.WriteLine();
             }

@@ -21,11 +21,10 @@ namespace Chess.Featuriser
                 var inputDeserialiser = new InputDeserialiser();
                 var states = inputDeserialiser.Deserialise(options);
 
-                //TODO if we no longer produce a list of PgnGames, how can we debug?
-                //if (options.Debug)
-                //{
-                //    DebugOutput.Debug(games);
-                //}
+                if (options.Debug)
+                {
+                    DebugOutput.Debug(states);
+                }
 
                 if (!string.IsNullOrEmpty(options.Output))
                 {

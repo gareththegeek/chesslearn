@@ -1,7 +1,9 @@
 ﻿{
-  "input": "simple.pgn",
-  "output": "outfile.csv",
-  "fen": true,
+  //"input": "simple.pgn",
+  "input":  "fens.csv",
+  "output": "fens2.csv",
+  "fen": true
+  //TODO distinct fens
   //"features": true,
   //"debug": true,
   //"PgnFile": "KingBaseLite2016-03-A00-A39.pgn"

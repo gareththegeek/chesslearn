@@ -11,7 +11,7 @@ namespace Chess.Featuriser.Pgn
         {
             var results = new List<BoardState>();
 
-            var boardState = new BoardState();
+            var boardState = BoardState.Initial();
 
             foreach (var move in game.Moves)
             {

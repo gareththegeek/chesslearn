@@ -1,5 +1,4 @@
 ﻿using Chess.Featuriser.Pgn;
-using System;
 using System.Collections.Generic;
 
 namespace Chess.Featuriser.State
@@ -8,16 +7,55 @@ namespace Chess.Featuriser.State
     {
         public BoardState()
         {
-            IsWhite = true;
-            WhiteCastleShort = true;
-            WhiteCastleLong = true;
-            BlackCastleShort = true;
-            BlackCastleLong = true;
-            MoveNumber = 1;
-            HalfMoveClock = 0;
-            EnPassantTarget = null;
+            Squares = new Piece[,]
+            {
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
+            };
+        }
 
-            Squares = new[,]
+        protected BoardState(BoardState original)
+        {
+            Move = original.Move;
+            IsWhite = original.IsWhite;
+            WhiteCastleShort = original.WhiteCastleShort;
+            WhiteCastleLong = original.WhiteCastleLong;
+            BlackCastleShort = original.BlackCastleShort;
+            BlackCastleLong = original.BlackCastleLong;
+            MoveNumber = original.MoveNumber;
+            HalfMoveClock = original.HalfMoveClock;
+            EnPassantTarget = original.EnPassantTarget;
+
+            Squares = new Piece[8, 8];
+            for (var rank = 0; rank < 8; rank++)
+            {
+                for (var file = 0; file < 8; file++)
+                {
+                    Squares[rank, file] = original.Squares[rank, file]?.Clone();
+                }
+            }
+        }
+
+        public static BoardState Initial()
+        {
+            var result = new BoardState();
+
+            result.IsWhite = true;
+            result.WhiteCastleShort = true;
+            result.WhiteCastleLong = true;
+            result.BlackCastleShort = true;
+            result.BlackCastleLong = true;
+            result.MoveNumber = 1;
+            result.HalfMoveClock = 0;
+            result.EnPassantTarget = null;
+
+            result.Squares = new[,]
             {
                 {
                     new Piece(PieceType.Rook, PieceListIndex.Rook1, true),
@@ -69,35 +107,15 @@ namespace Chess.Featuriser.State
             {
                 for (var file = 0; file < 8; file++)
                 {
-                    var piece = Squares[rank, file];
+                    var piece = result.Squares[rank, file];
                     if (piece != null)
                     {
                         piece.Square = new Square(rank, file);
                     }
                 }
             }
-        }
 
-        protected BoardState(BoardState original)
-        {
-            Move = original.Move;
-            IsWhite = original.IsWhite;
-            WhiteCastleShort = original.WhiteCastleShort;
-            WhiteCastleLong = original.WhiteCastleLong;
-            BlackCastleShort = original.BlackCastleShort;
-            BlackCastleLong = original.BlackCastleLong;
-            MoveNumber = original.MoveNumber;
-            HalfMoveClock = original.HalfMoveClock;
-            EnPassantTarget = original.EnPassantTarget;
-
-            Squares = new Piece[8, 8];
-            for (var rank = 0; rank < 8; rank++)
-            {
-                for (var file = 0; file < 8; file++)
-                {
-                    Squares[rank, file] = original.Squares[rank, file]?.Clone();
-                }
-            }
+            return result;
         }
 
         public PgnMove Move { get; set; }

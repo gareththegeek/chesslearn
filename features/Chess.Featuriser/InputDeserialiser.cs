@@ -86,9 +86,11 @@ namespace Chess.Featuriser
             startTime = DateTime.Now;
 
             Console.WriteLine("Generating state information");
-            //TODO implement a FenStateGenerator to generate states from fens
+            var stateGenerator = new FenStateGenerator();
+            var states = stateGenerator.Generate(fens);
+            Console.WriteLine($"Generated {states.Count()} states in {(DateTime.Now - startTime).TotalSeconds}s");
 
-            throw new NotImplementedException("Csv fen deserialisation is not yet complete");
+            return states;
         }
     }
 }
