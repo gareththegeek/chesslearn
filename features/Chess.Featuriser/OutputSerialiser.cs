@@ -47,7 +47,7 @@ namespace Chess.Featuriser
 
                         if (i++ % ReportEvery == 0)
                         {
-                            Console.WriteLine($"Serialised {i:n0} states ({i / (float)total * 100.0}%) in {(DateTime.Now - startTime).TotalSeconds:f2}s");
+                            Console.WriteLine($"Serialised {i:n0} states ({i / (float)total * 100.0:f2}%) in {(DateTime.Now - startTime).TotalSeconds:f2}s");
                             sw.Flush();
                         }
                     }
