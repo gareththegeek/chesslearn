@@ -1,10 +1,10 @@
 ﻿{
-  //"input": "simple.pgn",
-  "input":  "fens.csv",
-  //"output": "fens2.csv",
+  "input": "KingBase2017-A00-A39.pgn",
+  //"input":  "fens.csv",
+  "output": "KingBase2017-A00-A39-FENS.csv",
   "fen": true,
-  //TODO distinct fens
+  "unique": true
   //"features": true,
-  "debug": true
+  //"debug": true
   //"PgnFile": "KingBaseLite2016-03-A00-A39.pgn"
 }

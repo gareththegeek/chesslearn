@@ -16,7 +16,7 @@ namespace Chess.Featuriser
         public IEnumerable<BoardState> Deserialise(Options options)
         {
             Console.WriteLine("");
-            Console.WriteLine("Deserialising input");
+            Console.WriteLine("DESERIALISING INPUT");
 
             var extension = Path.GetExtension(options.Input).ToLower();
             switch (extension)
@@ -41,13 +41,13 @@ namespace Chess.Featuriser
                 var scanner = new PgnScanner();
                 tokens = scanner.Scan(stream).ToList();
             }
-            Console.WriteLine($"Scanned {tokens.Count()} tokens in {(DateTime.Now - startTime).TotalSeconds}s");
+            Console.WriteLine($"Scanned {tokens.Count():n0} tokens in {(DateTime.Now - startTime).TotalSeconds}s");
             startTime = DateTime.Now;
 
             Console.WriteLine("Parsing pgn games");
             var parser = new PgnParser();
             var games = parser.Parse(tokens);
-            Console.WriteLine($"Parsed {games.Count()} games in {(DateTime.Now - startTime).TotalSeconds}s");
+            Console.WriteLine($"Parsed {games.Count():n0} games in {(DateTime.Now - startTime).TotalSeconds}s");
             startTime = DateTime.Now;
 
             Console.WriteLine("Generating state information");
@@ -60,10 +60,10 @@ namespace Chess.Featuriser
 
                 if (i++ % ReportEvery == 0)
                 {
-                    Console.WriteLine($"Processed {states.Count} in {(DateTime.Now - startTime).TotalSeconds}s");
+                    Console.WriteLine($"Processed {states.Count:n0} in {(DateTime.Now - startTime).TotalSeconds}s");
                 }
             }
-            Console.WriteLine($"Processed states. {states.Count} states in {(DateTime.Now - startTime).TotalSeconds}s");
+            Console.WriteLine($"Processed states. {states.Count:n0} states in {(DateTime.Now - startTime).TotalSeconds}s");
 
             return states;
         }
@@ -82,13 +82,13 @@ namespace Chess.Featuriser
                 var scanner = new CsvScanner();
                 fens = scanner.Scan(stream);
             }
-            Console.WriteLine($"Read {fens.Count()} fens in {(DateTime.Now - startTime).TotalSeconds}s");
+            Console.WriteLine($"Read {fens.Count():n0} fens in {(DateTime.Now - startTime).TotalSeconds}s");
             startTime = DateTime.Now;
 
             Console.WriteLine("Generating state information");
             var stateGenerator = new FenStateGenerator();
             var states = stateGenerator.Generate(fens);
-            Console.WriteLine($"Generated {states.Count()} states in {(DateTime.Now - startTime).TotalSeconds}s");
+            Console.WriteLine($"Generated {states.Count():n0} states in {(DateTime.Now - startTime).TotalSeconds}s");
 
             return states;
         }

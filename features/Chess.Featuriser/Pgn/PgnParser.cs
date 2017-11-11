@@ -30,12 +30,12 @@ namespace Chess.Featuriser.Pgn
 
                     if (i++ % ReportEvery == 0)
                     {
-                        Console.WriteLine($"Processed {i - 1} games");
+                        Console.WriteLine($"Processed {i - 1:n0} games");
                     }
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine($"Error in game {i}");
+                    Console.WriteLine($"Error in game {i:n0}");
                     throw;
                 }
             }

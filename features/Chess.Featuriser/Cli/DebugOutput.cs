@@ -1,6 +1,5 @@
 ﻿using Chess.Featuriser.Features;
 using Chess.Featuriser.Fen;
-using Chess.Featuriser.Pgn;
 using Chess.Featuriser.State;
 using System;
 using System.Collections.Generic;
@@ -12,6 +11,8 @@ namespace Chess.Featuriser.Cli
     {
         public static void Debug(IEnumerable<BoardState> states)
         {
+            Console.WriteLine();
+            Console.WriteLine("DEBUG MODE");
             Console.WriteLine("Enter state number (1-" + states.Count() + ")");
             var n = int.Parse(Console.ReadLine());
 

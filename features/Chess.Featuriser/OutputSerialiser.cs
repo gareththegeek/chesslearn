@@ -7,6 +7,7 @@ using Chess.Featuriser.Fen;
 using System;
 using Chess.Featuriser.State;
 using Chess.Featuriser.Cli;
+using System.Linq;
 
 namespace Chess.Featuriser
 {
@@ -21,7 +22,7 @@ namespace Chess.Featuriser
 
             var startTime = DateTime.Now;
             Console.WriteLine();
-            Console.WriteLine("Serialising output");
+            Console.WriteLine("SERIALISING OUTPUT");
 
             var i = 0;
 
@@ -44,13 +45,13 @@ namespace Chess.Featuriser
 
                         if (i++ % ReportEvery == 0)
                         {
-                            Console.WriteLine($"Serialised {i} states in {(DateTime.Now - startTime).TotalSeconds}s");
+                            Console.WriteLine($"Serialised {i:n0} states in {(DateTime.Now - startTime).TotalSeconds}s");
                         }
                     }
                 }
             }
 
-            Console.WriteLine($"Wrote output file: {options.Output} - {i} states in {(DateTime.Now - startTime).TotalSeconds}s");
+            Console.WriteLine($"Wrote output file: {options.Output} - {i:n0} states in {(DateTime.Now - startTime).TotalSeconds}s");
         }
 
         private void WriteHeadings(StreamWriter sw, Options options)
@@ -156,10 +157,7 @@ namespace Chess.Featuriser
 
             if (options.Fen)
             {
-                var fenSerialiser = new FenSerialiser();
-
-                var fenValue = fenSerialiser.Serialise(state);
-                builder.Append(fenValue).Append(Delimeter);
+                builder.Append(state.Fen).Append(Delimeter);
             }
 
             if (options.Features)

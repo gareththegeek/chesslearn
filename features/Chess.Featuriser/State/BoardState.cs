@@ -119,6 +119,7 @@ namespace Chess.Featuriser.State
         }
 
         public PgnMove Move { get; set; }
+        public string Fen { get; set; }
 
         public bool IsWhite { get; set; }
         public bool WhiteCastleShort { get; set; }

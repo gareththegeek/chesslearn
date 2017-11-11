@@ -3,7 +3,7 @@ using CommandLine;
 
 namespace Chess.Featuriser.Cli
 {
-    public class Options: IConfigurationOptions
+    public class Options : IConfigurationOptions
     {
         [Option('h', "help", HelpText = "Display this help")]
         public bool Help { get; set; }
@@ -25,8 +25,11 @@ namespace Chess.Featuriser.Cli
 
         //TODO support uci output
 
+        [Option('u', "unique", HelpText = "Unique output - output only unique board positions.")]
+        public bool Unique { get; set; }
+
         [Option('d', "debug", HelpText = "Debug mode - Run debug mode for specific game. Either output filename or debug mode is required.")]
-        public bool Debug { get; set; }        
+        public bool Debug { get; set; }
 
         public bool Validate()
         {
@@ -36,19 +39,19 @@ namespace Chess.Featuriser.Cli
                 return false;
             }
 
-            if(!string.IsNullOrEmpty(ConfigurationFile) && !File.Exists(ConfigurationFile))
+            if (!string.IsNullOrEmpty(ConfigurationFile) && !File.Exists(ConfigurationFile))
             {
                 ConsoleHelper.PrintWarning($"Configuration file not found '{ConfigurationFile}'. Using command line parameters");
                 ConfigurationFile = null;
             }
 
-            if(!Debug && string.IsNullOrEmpty(Output))
+            if (!Debug && string.IsNullOrEmpty(Output))
             {
                 ConsoleHelper.PrintError("Must specify either Debug or Output mode");
                 return false;
             }
 
-            if(!string.IsNullOrEmpty(Output) && !Features && !Fen)
+            if (!string.IsNullOrEmpty(Output) && !Features && !Fen)
             {
                 ConsoleHelper.PrintError("One or more output formats must be specified (fen/features) when using Output mode");
                 return false;

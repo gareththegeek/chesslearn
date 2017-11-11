@@ -1,4 +1,5 @@
-﻿using Chess.Featuriser.State;
+﻿using Chess.Featuriser.Cli;
+using Chess.Featuriser.State;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,20 +10,28 @@ namespace Chess.Featuriser.Pgn
     {
         public IEnumerable<BoardState> GenerateStates(PgnGame game)
         {
-            var results = new List<BoardState>();
-
-            var boardState = BoardState.Initial();
-
-            foreach (var move in game.Moves)
+            try
             {
-                results.Add(boardState.Clone());
+                var results = new List<BoardState>();
+                var boardState = BoardState.Initial();
 
-                AdvanceBoardState(boardState, move);
+                foreach (var move in game.Moves)
+                {
+                    results.Add(boardState.Clone());
+
+                    AdvanceBoardState(boardState, move);
+                }
+
+                results.Add(boardState);
+
+                return results;
             }
-
-            results.Add(boardState);
-
-            return results;
+            catch
+            {
+                // Some games have errors in them like ambiguous moves - just discard these games
+                ConsoleHelper.PrintWarning($"Discarded invalid game: {game}");
+                return new List<BoardState>();
+            }
         }
 
         private void AdvanceBoardState(BoardState boardState, PgnMove move)
