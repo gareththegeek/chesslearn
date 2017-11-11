@@ -37,7 +37,10 @@ namespace Chess.Featuriser.Fen
         {
             var tokens = fen.Split(' ');
 
-            var result = new BoardState();
+            var result = new BoardState
+            {
+                Fen = fen
+            };
 
             ParseSquares(tokens[(int)FenTokens.Squares], result);
 

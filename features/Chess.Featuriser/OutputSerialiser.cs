@@ -6,6 +6,7 @@ using Chess.Featuriser.Fen;
 using System;
 using Chess.Featuriser.State;
 using Chess.Featuriser.Cli;
+using System.Linq;
 
 namespace Chess.Featuriser
 {
@@ -33,6 +34,7 @@ namespace Chess.Featuriser
                 {
                     WriteHeadings(sw, options);
 
+                    var total = fens.Count();
                     foreach (var fen in fens)
                     {
                         var state = fenStateGenerator.Generate(fen);
@@ -45,7 +47,8 @@ namespace Chess.Featuriser
 
                         if (i++ % ReportEvery == 0)
                         {
-                            Console.WriteLine($"Serialised {i:n0} states in {(DateTime.Now - startTime).TotalSeconds:f2}s");
+                            Console.WriteLine($"Serialised {i:n0} states ({i / (float)total * 100.0}%) in {(DateTime.Now - startTime).TotalSeconds:f2}s");
+                            sw.Flush();
                         }
                     }
                 }

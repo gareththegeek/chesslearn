@@ -1,8 +1,8 @@
 ﻿{
-  "input": "KingBase2017-A00-A39.pgn",
+  "input": "KingBase2017-A00-A39 a.pgn",
   //"input":  "bug.pgn",
   //"input":  "fens.csv",
-  "output": "KingBase2017-A00-A39-FENS.csv",
+  "output": "KingBase2017-A00-A39 a-FENS.csv",
   "fen": true,
   "unique": true
   //"features": true,

@@ -26,7 +26,7 @@ namespace Chess.Featuriser.Pgn
                 }
                 catch (Exception)
                 {
-                    ConsoleHelper.PrintWarning($"Error on move {i}");
+                    ConsoleHelper.PrintWarning($"Error on half move number {i} {move}");
                     throw;
                 }
             }

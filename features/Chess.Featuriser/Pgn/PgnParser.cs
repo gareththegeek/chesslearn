@@ -11,7 +11,6 @@ namespace Chess.Featuriser.Pgn
         private const int ReportEvery = 1000;
 
         private IEnumerator<PgnToken> enumerator;
-        private ICollection<PgnGame> games;
 
         public IEnumerable<string> Parse(IEnumerable<PgnToken> tokens)
         {
