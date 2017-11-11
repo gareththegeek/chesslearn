@@ -13,7 +13,7 @@ namespace Chess.Featuriser
     public class OutputSerialiser
     {
         private const string Delimeter = ",";
-        private const int ReportEvery = 10000;
+        private const int ReportEvery = 50000;
 
         public void Serialise(IEnumerable<string> fens, Options options)
         {
