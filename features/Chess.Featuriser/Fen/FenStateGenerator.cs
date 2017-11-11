@@ -26,18 +26,11 @@ namespace Chess.Featuriser.Fen
             MoveNumber
         }
         
-        public IEnumerable<BoardState> Generate(IEnumerable<string> fens)
+        public BoardState Generate(string fen)
         {
-            var states = new List<BoardState>();
-            foreach (var fen in fens)
-            {
-                pieceListIndexDictionary = new Dictionary<ColourPieceType, int>();
+            pieceListIndexDictionary = new Dictionary<ColourPieceType, int>();
 
-                var state = ParseFen(fen);
-                states.Add(state);
-            }
-
-            return states;
+            return ParseFen(fen);
         }
 
         private BoardState ParseFen(string fen)

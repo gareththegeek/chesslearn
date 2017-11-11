@@ -9,14 +9,14 @@ namespace Chess.Featuriser.Cli
 {
     public class DebugOutput
     {
-        public static void Debug(IEnumerable<BoardState> states)
+        public static void Debug(IEnumerable<string> fens)
         {
             Console.WriteLine();
             Console.WriteLine("DEBUG MODE");
-            Console.WriteLine("Enter state number (1-" + states.Count() + ")");
+            Console.WriteLine("Enter fen number (1-" + fens.Count() + ")");
             var n = int.Parse(Console.ReadLine());
 
-            var fenSerialiser = new FenSerialiser();
+            var fenStateGenerator = new FenStateGenerator();
             var featureGenerator = new FeatureGenerator();
 
             Console.OutputEncoding = System.Text.Encoding.Unicode;
@@ -27,11 +27,11 @@ namespace Chess.Featuriser.Cli
             var movestring = "";
 
             var i = n - 1;
-            while(i < states.Count())
+            while(i < fens.Count())
             {
-                var state = states.ElementAt(i);
+                var fen = fens.ElementAt(i);
+                var state = fenStateGenerator.Generate(fen);
 
-                var fen = fenSerialiser.Serialise(state);
                 PrintFen(fen);
 
                 featureGenerator.PopulateFeatures(state);

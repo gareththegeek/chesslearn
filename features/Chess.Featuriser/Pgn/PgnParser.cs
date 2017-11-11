@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Chess.Featuriser.Cli;
+using Chess.Featuriser.Fen;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,36 +13,49 @@ namespace Chess.Featuriser.Pgn
         private IEnumerator<PgnToken> enumerator;
         private ICollection<PgnGame> games;
 
-        public IEnumerable<PgnGame> Parse(IEnumerable<PgnToken> tokens)
+        public IEnumerable<string> Parse(IEnumerable<PgnToken> tokens)
         {
+            var stateGenerator = new PgnStateGenerator();
+            var fenSerialiser = new FenSerialiser();
+
             var tokensList = tokens.ToList();
 
             enumerator = tokensList
                 .Where(x => x.Type == PgnTokenType.Move || x.Type == PgnTokenType.Result)
                 .GetEnumerator();
 
-            games = new List<PgnGame>(tokensList.Count(x => x.Type == PgnTokenType.Result));
+            var fens = new List<string>();
 
+            var expectedTotal = tokensList.Count(x => x.Type == PgnTokenType.Result);
             var i = 1;
+            var games = 0;
+            var discarded = 0;
+            var startTime = DateTime.Now;
+
             while (enumerator.MoveNext())
             {
                 try
                 {
-                    games.Add(ParseGame());
+                    games += 1;
+                    var game = ParseGame();
+                    var states = stateGenerator.GenerateStates(game);
+                    fens.AddRange(states.Select(x => fenSerialiser.Serialise(x)));
 
                     if (i++ % ReportEvery == 0)
                     {
-                        Console.WriteLine($"Processed {i - 1:n0} games");
+                        Console.WriteLine($"Processed {i:n0}/{expectedTotal:n0} ({i / expectedTotal * 100.0}%) games in {(DateTime.Now - startTime).TotalSeconds}s");
                     }
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine($"Error in game {i:n0}");
-                    throw;
+                    discarded += 1;
+                    ConsoleHelper.PrintWarning($"Discarding game {i:n0}");
                 }
             }
 
-            return games;
+            Console.WriteLine($"Processed {games:n0} games, discarded {discarded:n0} ({discarded / games * 100.0}%) in {(DateTime.Now - startTime).TotalSeconds}s");
+
+            return fens;
         }
 
         private PgnGame ParseGame()
@@ -60,7 +75,7 @@ namespace Chess.Featuriser.Pgn
 
                     if (isWhite)
                     {
-                        move.Flags |= (int) PgnMoveFlags.IsWhite;
+                        move.Flags |= (int)PgnMoveFlags.IsWhite;
                     }
                     isWhite = !isWhite;
 

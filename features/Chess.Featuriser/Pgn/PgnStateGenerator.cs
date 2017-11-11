@@ -10,28 +10,30 @@ namespace Chess.Featuriser.Pgn
     {
         public IEnumerable<BoardState> GenerateStates(PgnGame game)
         {
-            try
-            {
-                var results = new List<BoardState>();
-                var boardState = BoardState.Initial();
+            var results = new List<BoardState>();
+            var boardState = BoardState.Initial();
 
-                foreach (var move in game.Moves)
+            var i = 1;
+            foreach (var move in game.Moves)
+            {
+                try
                 {
                     results.Add(boardState.Clone());
 
                     AdvanceBoardState(boardState, move);
+
+                    i += 1;
                 }
-
-                results.Add(boardState);
-
-                return results;
+                catch(Exception)
+                {
+                    ConsoleHelper.PrintWarning($"Error on move {i}");
+                    throw;
+                }
             }
-            catch
-            {
-                // Some games have errors in them like ambiguous moves - just discard these games
-                ConsoleHelper.PrintWarning($"Discarded invalid game: {game}");
-                return new List<BoardState>();
-            }
+
+            results.Add(boardState);
+
+            return results;
         }
 
         private void AdvanceBoardState(BoardState boardState, PgnMove move)
@@ -301,6 +303,13 @@ namespace Chess.Featuriser.Pgn
                                 x.Square.File == move.Origin.File)
                     .ToList();
             }
+
+            //1.b3 e5 2.Bb2 Nc6 3.e3 g6 4.f4 Bg7 5.Nf3 d6 6.Bb5 Ne7 7.fxe5 O - O 8.O - O dxe5 9.Bxc6 Nxc6 10.e4 f5 11.exf5 e4 12.Bxg7 Kxg7 0 - 1
+            // Problem false positive ambiguous move: 6 ..Ne7
+            // The system thinks it is ambiguous but it isn't.
+            // The Nc6 cannot move as he is pinned :(
+
+
             return pieces.Single();
         }
 

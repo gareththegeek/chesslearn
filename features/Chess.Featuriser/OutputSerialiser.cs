@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using Chess.Featuriser.Pgn;
 using System.Text;
 using Chess.Featuriser.Features;
 using Chess.Featuriser.Fen;
 using System;
 using Chess.Featuriser.State;
 using Chess.Featuriser.Cli;
-using System.Linq;
 
 namespace Chess.Featuriser
 {
@@ -16,7 +14,7 @@ namespace Chess.Featuriser
         private const string Delimeter = ",";
         private const int ReportEvery = 10000;
 
-        public void Serialise(IEnumerable<BoardState> states, Options options)
+        public void Serialise(IEnumerable<string> fens, Options options)
         {
             if (!options.Features && !options.Fen) throw new ArgumentException("Must specify features or fen to seriliase");
 
@@ -24,19 +22,21 @@ namespace Chess.Featuriser
             Console.WriteLine();
             Console.WriteLine("SERIALISING OUTPUT");
 
+            var fenStateGenerator = new FenStateGenerator();
+            var featureGenerator = new FeatureGenerator();
+
             var i = 0;
 
             using (var stream = new FileStream(options.Output, FileMode.Create, FileAccess.Write))
             {
-                var stateGenerator = new PgnStateGenerator();
-                var featureGenerator = new FeatureGenerator();
-
                 using (var sw = new StreamWriter(stream))
                 {
                     WriteHeadings(sw, options);
 
-                    foreach (var state in states)
+                    foreach (var fen in fens)
                     {
+                        var state = fenStateGenerator.Generate(fen);
+
                         if (options.Features)
                         {
                             featureGenerator.PopulateFeatures(state);
