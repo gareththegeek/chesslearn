@@ -12,6 +12,9 @@ def eval(position):
     deep.setfenposition(position)
     move = deep.bestmove()
 
+    if move == None:
+        return None
+
     split = move["info"].split(" ")
     index = split.index("score")
     score = split[index + 2]
@@ -31,8 +34,13 @@ with open(inputFile, "rt") as fin, open(outputFile, "wt", newline="") as fout:
             fen = row[0]
             isWhite = fen.split(" ")[1] == "b"
             score = eval(fen)
+
+            if score == None:
+                continue
+
             if isWhite:
                 score = -score
+                
             row = [fen]+[str(score)]
             writer.writerow(row)
             #print("[" + str(i) + "]: " + ", ".join(row))
