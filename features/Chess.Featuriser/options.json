@@ -1,5 +1,6 @@
 ﻿{
   "input": "KingBase2017-A00-A39.pgn",
+  //"input":  "bug.pgn",
   //"input":  "fens.csv",
   "output": "KingBase2017-A00-A39-FENS.csv",
   "fen": true,

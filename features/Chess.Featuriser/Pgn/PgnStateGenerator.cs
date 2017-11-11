@@ -24,7 +24,7 @@ namespace Chess.Featuriser.Pgn
 
                     i += 1;
                 }
-                catch(Exception)
+                catch (Exception)
                 {
                     ConsoleHelper.PrintWarning($"Error on move {i}");
                     throw;
@@ -184,7 +184,7 @@ namespace Chess.Featuriser.Pgn
                                 x.Square.Rank + direction == move.Square.Rank.Value)
                 .ToList();
 
-            return Disambiguate(move, pawns).Square;
+            return Disambiguate(move, pawns, boardState).Square;
         }
 
         private Square FindKnightOrigin(BoardState boardState, PgnMove move)
@@ -202,7 +202,7 @@ namespace Chess.Featuriser.Pgn
                              Math.Abs(x.Square.File - move.Square.File.Value) == 2))
                 .ToList();
 
-            return Disambiguate(move, knights).Square;
+            return Disambiguate(move, knights, boardState).Square;
         }
 
         private Square FindBishopOrigin(BoardState boardState, PgnMove move)
@@ -217,7 +217,7 @@ namespace Chess.Featuriser.Pgn
                 .Where(x => boardState.PathIsClear(x.Square, move.Square.ToSquare()))
                 .ToList();
 
-            return Disambiguate(move, shops).Square;
+            return Disambiguate(move, shops, boardState).Square;
         }
 
         private Square FindRookOrigin(BoardState boardState, PgnMove move)
@@ -233,7 +233,7 @@ namespace Chess.Featuriser.Pgn
                 .Where(x => boardState.PathIsClear(x.Square, move.Square.ToSquare()))
                 .ToList();
 
-            var origin = Disambiguate(move, rooks).Square;
+            var origin = Disambiguate(move, rooks, boardState).Square;
 
             if (origin.File == 0)
             {
@@ -294,21 +294,41 @@ namespace Chess.Featuriser.Pgn
             return king.Square;
         }
 
-        private static Piece Disambiguate(PgnMove move, List<Piece> pieces)
+        private static Piece Disambiguate(PgnMove move, List<Piece> pieces, BoardState currentState)
         {
             if (pieces.Count == 2)
             {
-                pieces = pieces
+                //1.b3 e5 2.Bb2 Nc6 3.e3 g6 4.f4 Bg7 5.Nf3 d6 6.Bb5 Ne7 7.fxe5 O - O 8.O - O dxe5 9.Bxc6 Nxc6 10.e4 f5 11.exf5 e4 12.Bxg7 Kxg7 0 - 1
+                // Problem false positive ambiguous move: 6 ..Ne7
+                // The system thinks it is ambiguous but it isn't.
+                // The Nc6 cannot move as he is pinned :(
+
+                var specifiedPieces = pieces
                     .Where(x => x.Square.Rank == move.Origin.Rank ||
                                 x.Square.File == move.Origin.File)
                     .ToList();
+
+                if (specifiedPieces.Count == 1)
+                {
+                    // Sometimes the move is disambiguated explicitly e.g. Nge7
+                    pieces = specifiedPieces;
+                }
+                else
+                {
+                    // Sometimes is it implicit e.g. pinned
+                    var candidates = pieces.ToList(); // clone
+                    foreach (var piece in pieces)
+                    {
+                        var state = currentState.Clone();
+                        state = state.MakeMove(piece, move.Square.ToSquare());
+                        if (state.IsInCheck())
+                        {
+                            candidates.Remove(piece);
+                        }
+                    }
+                    pieces = candidates;
+                }
             }
-
-            //1.b3 e5 2.Bb2 Nc6 3.e3 g6 4.f4 Bg7 5.Nf3 d6 6.Bb5 Ne7 7.fxe5 O - O 8.O - O dxe5 9.Bxc6 Nxc6 10.e4 f5 11.exf5 e4 12.Bxg7 Kxg7 0 - 1
-            // Problem false positive ambiguous move: 6 ..Ne7
-            // The system thinks it is ambiguous but it isn't.
-            // The Nc6 cannot move as he is pinned :(
-
 
             return pieces.Single();
         }
