@@ -1,4 +1,5 @@
 from pystockfish import *
+import sys
 import csv
 import time
 
@@ -26,16 +27,21 @@ with open(inputFile, "rt") as fin, open(outputFile, "wt", newline="") as fout:
     next(reader, None) # Skip headings
     i = 0
     for row in reader:
-        fen = row[0]
-        isWhite = fen.split(" ")[1] == "b"
-        score = eval(fen)
-        if isWhite:
-            score = -score
-        row = [fen]+[str(score)]
-        writer.writerow(row)
-        #print("[" + str(i) + "]: " + ", ".join(row))
-        i = i + 1
-        if(i%10==0):
-            print("Written " + str(i) + " rows in " + str(time.clock() - start))
+        try:
+            fen = row[0]
+            isWhite = fen.split(" ")[1] == "b"
+            score = eval(fen)
+            if isWhite:
+                score = -score
+            row = [fen]+[str(score)]
+            writer.writerow(row)
+            #print("[" + str(i) + "]: " + ", ".join(row))
+            i = i + 1
+            if(i%10==0):
+                print("Written " + str(i) + " rows in " + str(time.clock() - start))
+        except:
+            e = sys.exc_info()[0]
+            print("Error " + str(e))
+
 
 print("Complete. " + str(i) + " rows total " + str(time.clock() - start) + " seconds")
