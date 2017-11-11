@@ -17,6 +17,8 @@ def eval(position):
 
     return int(score) / 100
 
+#fails somewhere around 2520
+
 start = time.clock()
 with open(inputFile, "rt") as fin, open(outputFile, "wt", newline="") as fout:
     reader = csv.reader(fin, delimiter=",")

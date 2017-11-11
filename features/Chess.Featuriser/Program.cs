@@ -10,6 +10,8 @@ namespace Chess.Featuriser
     {
         public static void Main(string[] args)
         {
+            var startTime = DateTime.Now;
+
             try
             {
                 Banner.Print("Chess Featuriser");
@@ -20,7 +22,7 @@ namespace Chess.Featuriser
                 {
                     return;
                 }
-
+                
                 var inputDeserialiser = new InputDeserialiser();
                 var fens = inputDeserialiser.Deserialise(options);
                 inputDeserialiser = null;
@@ -41,6 +43,8 @@ namespace Chess.Featuriser
             {
                 ConsoleHelper.PrintError($"Unexpected error: {ex.Message}");
             }
+
+            Console.WriteLine($"Total time {(DateTime.Now - startTime).TotalSeconds:f2}s");
 
             Console.WriteLine("Press enter to quit");
             Console.ReadLine();

@@ -68,6 +68,12 @@ namespace Chess.Featuriser.Pgn
             {
                 try
                 {
+                    if (enumerator.Current.Text.Contains("#"))
+                    {
+                        enumerator.MoveNext();
+                        continue;
+                    }
+
                     i++;
                     var move = ParseMove();
                     game.Moves.Add(move);
