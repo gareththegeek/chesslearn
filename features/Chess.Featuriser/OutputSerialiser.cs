@@ -45,13 +45,13 @@ namespace Chess.Featuriser
 
                         if (i++ % ReportEvery == 0)
                         {
-                            Console.WriteLine($"Serialised {i:n0} states in {(DateTime.Now - startTime).TotalSeconds}s");
+                            Console.WriteLine($"Serialised {i:n0} states in {(DateTime.Now - startTime).TotalSeconds:f2}s");
                         }
                     }
                 }
             }
 
-            Console.WriteLine($"Wrote output file: {options.Output} - {i:n0} states in {(DateTime.Now - startTime).TotalSeconds}s");
+            Console.WriteLine($"Wrote output file: {options.Output} - {i:n0} states in {(DateTime.Now - startTime).TotalSeconds:f2}s");
         }
 
         private void WriteHeadings(StreamWriter sw, Options options)

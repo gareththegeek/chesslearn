@@ -43,7 +43,7 @@ namespace Chess.Featuriser.Pgn
 
                     if (i++ % ReportEvery == 0)
                     {
-                        Console.WriteLine($"Processed {i:n0}/{expectedTotal:n0} ({i / expectedTotal * 100.0}%) games in {(DateTime.Now - startTime).TotalSeconds}s");
+                        Console.WriteLine($"Processed {i:n0}/{expectedTotal:n0} ({i / (float)expectedTotal * 100.0:f2}%) games in {(DateTime.Now - startTime).TotalSeconds:f2}s");
                     }
                 }
                 catch (Exception)
@@ -53,7 +53,7 @@ namespace Chess.Featuriser.Pgn
                 }
             }
 
-            Console.WriteLine($"Processed {games:n0} games, discarded {discarded:n0} ({discarded / games * 100.0}%) in {(DateTime.Now - startTime).TotalSeconds}s");
+            Console.WriteLine($"Processed {games:n0} games, discarded {discarded:n0} ({discarded / (float)games * 100.0:f2}%) in {(DateTime.Now - startTime).TotalSeconds:f2}s");
 
             return fens;
         }

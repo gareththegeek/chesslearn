@@ -55,33 +55,16 @@ namespace Chess.Featuriser
                 var scanner = new PgnScanner();
                 tokens = scanner.Scan(stream).ToList();
             }
-            Console.WriteLine($"Scanned {tokens.Count():n0} tokens in {(DateTime.Now - startTime).TotalSeconds}s");
+            Console.WriteLine($"Scanned {tokens.Count():n0} tokens in {(DateTime.Now - startTime).TotalSeconds:f2}s");
             startTime = DateTime.Now;
 
             Console.WriteLine("Parsing pgn games");
             var parser = new PgnParser();
             var fens = parser.Parse(tokens);
-            Console.WriteLine($"Parsed {fens.Count():n0} fens in {(DateTime.Now - startTime).TotalSeconds}s");
+            Console.WriteLine($"Parsed {fens.Count():n0} fens in {(DateTime.Now - startTime).TotalSeconds:f2}s");
             startTime = DateTime.Now;
 
             return fens;
-
-            //Console.WriteLine("Generating state information");
-            //var stateGenerator = new PgnStateGenerator();
-            //var states = new List<BoardState>();
-            //var i = 1;
-            //foreach (var game in games)
-            //{
-            //    states.AddRange(stateGenerator.GenerateStates(game));
-
-            //    if (i++ % ReportEvery == 0)
-            //    {
-            //        Console.WriteLine($"Processed {states.Count:n0} in {(DateTime.Now - startTime).TotalSeconds}s");
-            //    }
-            //}
-            //Console.WriteLine($"Processed states. {states.Count:n0} states in {(DateTime.Now - startTime).TotalSeconds}s");
-
-            //return states;
         }
 
         private IEnumerable<string> DeserialiseCsv(Options options)
@@ -98,13 +81,7 @@ namespace Chess.Featuriser
                 var scanner = new CsvScanner();
                 fens = scanner.Scan(stream);
             }
-            Console.WriteLine($"Read {fens.Count():n0} fens in {(DateTime.Now - startTime).TotalSeconds}s");
-            //startTime = DateTime.Now;
-
-            //Console.WriteLine("Generating state information");
-            //var stateGenerator = new FenStateGenerator();
-            //var states = stateGenerator.Generate(fens);
-            //Console.WriteLine($"Generated {states.Count():n0} states in {(DateTime.Now - startTime).TotalSeconds}s");
+            Console.WriteLine($"Read {fens.Count():n0} fens in {(DateTime.Now - startTime).TotalSeconds:f2}s");
 
             return fens;
         }
