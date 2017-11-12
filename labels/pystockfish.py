@@ -230,7 +230,13 @@ class Engine(subprocess.Popen):
         Used to synchronize the python engine object with the back-end engine.  Sends 'isready' and waits for 'readyok.'
         """
         self.put('isready')
+        timeout = time.time() + 2 
         while True:
             text = self.stdout.readline().strip()
             if text == 'readyok':
                 return text
+            
+            if time.time() > timeout:
+                print("Timeout Exceeded")
+                self.startEngine()
+                return None

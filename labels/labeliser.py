@@ -28,8 +28,8 @@ with open(inputFile, "rt") as fin, open(outputFile, "wt", newline="") as fout:
     writer = csv.writer(fout)
     next(reader, None) # Skip headings
 
-    #for j in range(0, 386308):
-    #    next(reader, None)
+    # for j in range(0, 506882):
+    #     next(reader, None)
 
     i = 0
     for row in reader:
