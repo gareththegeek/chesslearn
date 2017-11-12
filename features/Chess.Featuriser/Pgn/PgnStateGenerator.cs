@@ -280,12 +280,13 @@ namespace Chess.Featuriser.Pgn
         {
             if (move.Square.Rank == null || move.Square.File == null) throw new InvalidOperationException("Move must have destination square");
 
-            var queen = boardState
+            var queens = boardState
                 .Flatten()
-                .Single(x => x.PieceType == PieceType.Queen &&
-                             x.IsWhite == boardState.IsWhite);
+                .Where(x => x.PieceType == PieceType.Queen &&
+                             x.IsWhite == boardState.IsWhite)
+                .ToList();
 
-            return queen.Square;
+            return Disambiguate(move, queens, boardState).Square;
         }
 
         private Square FindKingOrigin(BoardState boardState, PgnMove move)
@@ -311,41 +312,57 @@ namespace Chess.Featuriser.Pgn
 
         private static Piece Disambiguate(PgnMove move, List<Piece> pieces, BoardState currentState)
         {
-            if (pieces.Count == 2)
+            if (pieces.Count == 1)
             {
-                //1.b3 e5 2.Bb2 Nc6 3.e3 g6 4.f4 Bg7 5.Nf3 d6 6.Bb5 Ne7 7.fxe5 O - O 8.O - O dxe5 9.Bxc6 Nxc6 10.e4 f5 11.exf5 e4 12.Bxg7 Kxg7 0 - 1
-                // Problem false positive ambiguous move: 6 ..Ne7
-                // The system thinks it is ambiguous but it isn't.
-                // The Nc6 cannot move as he is pinned :(
-
-                var specifiedPieces = pieces
-                    .Where(x => x.Square.Rank == move.Origin.Rank ||
-                                x.Square.File == move.Origin.File)
-                    .ToList();
-
-                if (specifiedPieces.Count == 1)
-                {
-                    // Sometimes the move is disambiguated explicitly e.g. Nge7
-                    pieces = specifiedPieces;
-                }
-                else
-                {
-                    // Sometimes is it implicit e.g. pinned
-                    var candidates = pieces.ToList(); // clone
-                    foreach (var piece in pieces)
-                    {
-                        var state = currentState.Clone();
-                        state = state.MakeMove(piece, move.Square.ToSquare());
-                        if (state.IsInCheck())
-                        {
-                            candidates.Remove(piece);
-                        }
-                    }
-                    pieces = candidates;
-                }
+                return pieces.Single();
             }
 
-            return pieces.Single();
+            var specifiedPieces = pieces
+                .Where(x => x.Square.Rank == move.Origin.Rank ||
+                            x.Square.File == move.Origin.File)
+                .ToList();
+
+            if (specifiedPieces.Count == 1)
+            {
+                // Sometimes the move is disambiguated explicitly e.g. Nge7
+                return specifiedPieces.Single();
+            }
+
+            var pieceType = pieces.First().PieceType;
+            if (pieceType == PieceType.Queen || pieceType == PieceType.Bishop)
+            {
+                return DisambiguateQueenBishop(move, pieces);
+            }
+
+            // Sometimes is it implicit e.g. pinned
+            var candidates = pieces.ToList(); // clone
+            foreach (var piece in pieces)
+            {
+                var state = currentState.Clone();
+                state = state.MakeMove(piece, move.Square.ToSquare());
+                if (state.IsInCheck())
+                {
+                    candidates.Remove(piece);
+                }
+            }
+            return candidates.Single();
+        }
+
+        private static Piece DisambiguateQueenBishop(PgnMove move, List<Piece> pieces)
+        {
+            var candidates = pieces
+                .Where(x => Math.Abs(x.Square.File - (int)move.Square.File) == Math.Abs(x.Square.Rank - (int)move.Square.Rank))
+                .ToList();
+
+            if (candidates.Count == 1)
+            {
+                return candidates.Single();
+            }
+
+            return pieces
+                .Where(x => x.Square.File == move.Square.File || 
+                    x.Square.Rank == move.Square.Rank)
+                .Single();
         }
 
         private static void AdvanceCounters(BoardState boardState)
