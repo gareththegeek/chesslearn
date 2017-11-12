@@ -107,6 +107,9 @@ namespace Chess.Featuriser.Pgn
         private void Move(BoardState boardState, Square origin, Square destination)
         {
             var piece = boardState.Squares[origin.Rank, origin.File];
+
+            DisableCastling(boardState, destination);
+
             boardState.Squares[destination.Rank, destination.File] = piece;
             boardState.Squares[origin.Rank, origin.File] = null;
             piece.Square = destination;
@@ -235,30 +238,35 @@ namespace Chess.Featuriser.Pgn
 
             var origin = Disambiguate(move, rooks, boardState).Square;
 
-            if (origin.File == 0)
+            DisableCastling(boardState, origin);
+
+            return origin;
+        }
+
+        private static void DisableCastling(BoardState boardState, Square square)
+        {
+            if (square.File == 0)
             {
-                if (origin.Rank == 0)
+                if (square.Rank == 0)
                 {
                     boardState.WhiteCastleLong = false;
                 }
-                else if (origin.Rank == 7)
+                else if (square.Rank == 7)
                 {
                     boardState.BlackCastleLong = false;
                 }
             }
-            else if (origin.File == 7)
+            else if (square.File == 7)
             {
-                if (origin.Rank == 0)
+                if (square.Rank == 0)
                 {
                     boardState.WhiteCastleShort = false;
                 }
-                else if (origin.Rank == 7)
+                else if (square.Rank == 7)
                 {
                     boardState.BlackCastleShort = false;
                 }
             }
-
-            return origin;
         }
 
         private Square FindQueenOrigin(BoardState boardState, PgnMove move)

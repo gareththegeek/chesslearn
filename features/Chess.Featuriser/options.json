@@ -1,15 +1,15 @@
 ﻿// Configuration for parsing a pgn to fen csv
-//{
-//  "input": "KingBase2017-A00-A39 a.pgn",
-//  "output": "KingBase2017-A00-A39 a-FENS.csv",
-//  "fen": true,
-//  "unique": true
-//}
+{
+  "input": "KingBase2017-A00-A39 a.pgn",
+  "output": "KingBase2017-A00-A39 a-FENS.csv",
+  "fen": true,
+  "unique": true
+}
 
 // Configuration for parsing a labelled fen csv to features csv
-{
-  "input": "KingBase2017-A00A39 a-LABELLED.csv",
-  "output": "KingBase2017-A00A39 a-FEATURES-LABELLED.csv",
-  "features": true,
-  "scores":  true
-}
+//{
+//  "input": "KingBase2017-A00A39 a-LABELLED.csv",
+//  "output": "KingBase2017-A00A39 a-FEATURES-LABELLED.csv",
+//  "features": true,
+//  "scores":  true
+//}
