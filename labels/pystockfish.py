@@ -122,6 +122,9 @@ class Engine(subprocess.Popen):
     """
 
     def __init__(self, depth=2, ponder=False, param={}, rand=False, rand_min=-10, rand_max=10):
+        self.startEngine(depth, ponder, param, rand, rand_min, rand_max)
+
+    def startEngine(self, depth=2, ponder=False, param={}, rand=False, rand_min=-10, rand_max=10):
         subprocess.Popen.__init__(self,
                                   'stockfish',
                                   universal_newlines=True,
@@ -206,7 +209,7 @@ class Engine(subprocess.Popen):
     def bestmove(self):
         last_line = ""
         self.go()
-        timeout = time.time() + 30 # 30 second timeout
+        timeout = time.time() + 2 
         while True:
             text = self.stdout.readline().strip()
             split_text = text.split(' ')
@@ -218,6 +221,8 @@ class Engine(subprocess.Popen):
             last_line = text
 
             if time.time() > timeout:
+                print("Timeout Exceeded")
+                self.startEngine()
                 return None
 
     def isready(self):
