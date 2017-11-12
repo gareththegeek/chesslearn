@@ -331,7 +331,11 @@ namespace Chess.Featuriser.Pgn
             var pieceType = pieces.First().PieceType;
             if (pieceType == PieceType.Queen || pieceType == PieceType.Bishop)
             {
-                return DisambiguateQueenBishop(move, pieces);
+                var result = DisambiguateQueenBishop(move, pieces);
+                if (result != null)
+                {
+                    return result;
+                }
             }
 
             // Sometimes is it implicit e.g. pinned
@@ -354,15 +358,20 @@ namespace Chess.Featuriser.Pgn
                 .Where(x => Math.Abs(x.Square.File - (int)move.Square.File) == Math.Abs(x.Square.Rank - (int)move.Square.Rank))
                 .ToList();
 
+            if (candidates.Count != 1)
+            {
+                candidates = pieces
+                    .Where(x => x.Square.File == move.Square.File ||
+                        x.Square.Rank == move.Square.Rank)
+                    .ToList();
+            }
+
             if (candidates.Count == 1)
             {
                 return candidates.Single();
             }
 
-            return pieces
-                .Where(x => x.Square.File == move.Square.File || 
-                    x.Square.Rank == move.Square.Rank)
-                .Single();
+            return null;
         }
 
         private static void AdvanceCounters(BoardState boardState)
