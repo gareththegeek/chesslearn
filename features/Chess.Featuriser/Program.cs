@@ -1,8 +1,5 @@
 ﻿using System;
 using Chess.Featuriser.Cli;
-using Chess.Featuriser.Fen;
-using System.Linq;
-using Chess.Featuriser.State;
 
 namespace Chess.Featuriser
 {

@@ -14,7 +14,7 @@ namespace Chess.Featuriser.Fen
                 reader.ReadLine(); // Discard headings
                 while (!reader.EndOfStream)
                 {
-                    result.Add(reader.ReadLine().Split(',').First());
+                    result.Add(reader.ReadLine());
                 }
                 return result;
             }

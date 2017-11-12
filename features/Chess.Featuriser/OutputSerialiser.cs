@@ -37,7 +37,17 @@ namespace Chess.Featuriser
                     var total = fens.Count();
                     foreach (var fen in fens)
                     {
-                        var state = fenStateGenerator.Generate(fen);
+                        var fenValue = fen;
+                        float? score = null;
+                        if (options.Scores)
+                        {
+                            var tokens = fen.Split(',');
+                            fenValue = tokens[0];
+                            score = float.Parse(tokens[1]);
+                        }
+
+                        var state = fenStateGenerator.Generate(fenValue);
+                        state.Score = score;
 
                         if (options.Features)
                         {
@@ -91,6 +101,11 @@ namespace Chess.Featuriser
 
                 WriteAttackMapHeadings("W", builder);
                 WriteAttackMapHeadings("B", builder);
+            }
+
+            if (options.Scores)
+            {
+                builder.Append("SCORE").Append(Delimeter);
             }
 
             builder.Remove(builder.Length - 1, 1);
@@ -166,6 +181,11 @@ namespace Chess.Featuriser
             if (options.Features)
             {
                 AppendFeatures(state, builder);
+            }
+
+            if (options.Scores)
+            {
+                throw new NotImplementedException("How can we access the score from here?");
             }
 
             builder.Remove(builder.Length - 1, 1);

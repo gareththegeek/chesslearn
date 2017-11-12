@@ -1,11 +1,19 @@
 from pystockfish import *
 import csv
 import time
+import sys
+
+if len(sys.argv) != 3:
+    print("Usage: labeliser.py inputFilename outputFilename")
+    quit()
 
 deep = Engine(depth=10)
 
-inputFile = "KingBase2017-A00-A39 a-FENS.csv"
-outputFile = "KingBase2017-A00-A39 a-LABELLED.csv"
+#inputFile = "KingBase2017-A00-A39 a-FENS.csv"
+#outputFile = "KingBase2017-A00-A39 a-LABELLED.csv"
+
+inputFile = sys.argv[1]
+outputFile = sys.argv[2]
 
 def eval(position):
     deep.setfenposition(position)
