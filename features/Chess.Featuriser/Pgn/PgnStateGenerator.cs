@@ -45,6 +45,7 @@ namespace Chess.Featuriser.Pgn
         private void ApplyMove(BoardState boardState, PgnMove move)
         {
             boardState.Move = move;
+            var currentEpTarget = boardState.EnPassantTarget;
             boardState.EnPassantTarget = null;
 
             if ((move.Flags & (int)PgnMoveFlags.Castle) != 0)
@@ -59,7 +60,7 @@ namespace Chess.Featuriser.Pgn
             var origin = FindOrigin(boardState, move);
             var destination = move.Square.ToSquare();
 
-            Move(boardState, origin, destination);
+            Move(boardState, origin, destination, currentEpTarget);
 
             if ((move.Flags & (int)PgnMoveFlags.Promote) != 0)
             {
@@ -94,21 +95,27 @@ namespace Chess.Featuriser.Pgn
 
             if (castleShort)
             {
-                Move(boardState, new Square(rank, 4), new Square(rank, 6));
-                Move(boardState, new Square(rank, 7), new Square(rank, 5));
+                Move(boardState, new Square(rank, 4), new Square(rank, 6), null);
+                Move(boardState, new Square(rank, 7), new Square(rank, 5), null);
             }
             else
             {
-                Move(boardState, new Square(rank, 4), new Square(rank, 2));
-                Move(boardState, new Square(rank, 0), new Square(rank, 3));
+                Move(boardState, new Square(rank, 4), new Square(rank, 2), null);
+                Move(boardState, new Square(rank, 0), new Square(rank, 3), null);
             }
         }
 
-        private void Move(BoardState boardState, Square origin, Square destination)
+        private void Move(BoardState boardState, Square origin, Square destination, Square currentEpTarget)
         {
             var piece = boardState.Squares[origin.Rank, origin.File];
 
             DisableCastling(boardState, destination);
+
+            if (destination.Equals(currentEpTarget) && piece.PieceType == PieceType.Pawn)
+            {
+                var direction = boardState.IsWhite ? -1 : 1;
+                boardState.Squares[destination.Rank + direction, destination.File] = null;
+            }
 
             boardState.Squares[destination.Rank, destination.File] = piece;
             boardState.Squares[origin.Rank, origin.File] = null;

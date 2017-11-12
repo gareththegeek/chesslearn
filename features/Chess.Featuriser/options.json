@@ -6,6 +6,14 @@
   "unique": true
 }
 
+//// Configuration for bugged pgn parsing
+//{
+//  "input": "bug.pgn",
+//  "output": "bug.csv",
+//  "fen": true,
+//  "unique": true
+//}
+
 // Configuration for parsing a labelled fen csv to features csv
 //{
 //  "input": "KingBase2017-A00A39 a-LABELLED.csv",

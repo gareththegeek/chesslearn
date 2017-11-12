@@ -15,5 +15,17 @@
         {
             return (char)(File + 'a') + (Rank + 1).ToString();
         }
+
+        public override bool Equals(object obj)
+        {
+            var other = obj as Square;
+
+            if (other == null)
+            {
+                return base.Equals(obj);
+            }
+
+            return Rank == other.Rank && File == other.File;
+        }
     }
 }
