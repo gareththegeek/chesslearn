@@ -74,6 +74,12 @@ namespace Chess.Featuriser.Pgn
                         continue;
                     }
 
+                    if(enumerator.Current.Text == "{")
+                    {
+                        SkipRemaining();
+                        break;
+                    }
+
                     i++;
                     var move = ParseMove();
                     game.Moves.Add(move);
@@ -93,6 +99,15 @@ namespace Chess.Featuriser.Pgn
             }
 
             return game;
+        }
+
+        private void SkipRemaining()
+        {
+            while (enumerator.Current.Type != PgnTokenType.Result)
+            {
+                ConsoleHelper.PrintWarning("Continuation detected ({), skipping remaining moves");
+                enumerator.MoveNext();
+            }
         }
 
         private PgnMove ParseMove()

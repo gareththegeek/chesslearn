@@ -1,7 +1,7 @@
 ﻿// Configuration for parsing a pgn to fen csv
 {
-  "input": "KingBase2017-A00-A39 a.pgn",
-  "output": "KingBase2017-A00-A39 a-FENS.csv",
+  "input": "KingBase2017-A80-A99 a.pgn",
+  "output": "KingBase2017-A80-A99 a-FENS.csv",
   "fen": true,
   "unique": true
 }
