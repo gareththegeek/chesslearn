@@ -29,7 +29,8 @@ namespace Chess.Featuriser.Cli
             var i = n - 1;
             while(i < fens.Count())
             {
-                var fen = fens.ElementAt(i);
+                var labelledFen = new LabelledFen(fens.ElementAt(i));
+                var fen = labelledFen.Fen;
                 var state = fenStateGenerator.Generate(fen);
 
                 PrintFen(fen);

@@ -1,10 +1,10 @@
-﻿// Configuration for parsing a pgn to fen csv
-{
-  "input": "KingBase2017-A80-A99 a.pgn",
-  "output": "KingBase2017-A80-A99 a-FENS.csv",
-  "fen": true,
-  "unique": true
-}
+﻿//// Configuration for parsing a pgn to fen csv
+//{
+//  "input": "KingBase2017-A80-A99 a.pgn",
+//  "output": "KingBase2017-A80-A99 a-FENS.csv",
+//  "fen": true,
+//  "unique": true
+//}
 
 //// Configuration for bugged pgn parsing
 //{
@@ -13,6 +13,17 @@
 //  "fen": true,
 //  "unique": true
 //}
+
+// Configuration for testing feature generation from labelled data
+{
+  "input": "labelled.csv",
+  //"output": "labelledfeatures.csv",
+  //"fen": true,
+  //"features": true,
+  "scores":  true,
+  "debug":  true
+}
+
 
 // Configuration for parsing a labelled fen csv to features csv
 //{

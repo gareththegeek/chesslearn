@@ -69,9 +69,6 @@ namespace Chess.Featuriser
 
         private IEnumerable<string> DeserialiseCsv(Options options)
         {
-            //TODO include score column in board state
-            //TODO add score column as option at CLI?
-
             var startTime = DateTime.Now;
 
             Console.WriteLine("Scanning csv text");

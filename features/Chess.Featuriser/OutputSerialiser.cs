@@ -37,17 +37,13 @@ namespace Chess.Featuriser
                     var total = fens.Count();
                     foreach (var fen in fens)
                     {
-                        var fenValue = fen;
-                        float? score = null;
+                        var labelledFen = new LabelledFen(fen);
+                        
+                        var state = fenStateGenerator.Generate(labelledFen.Fen);
                         if (options.Scores)
                         {
-                            var tokens = fen.Split(',');
-                            fenValue = tokens[0];
-                            score = float.Parse(tokens[1]);
+                            state.Score = labelledFen.Score;
                         }
-
-                        var state = fenStateGenerator.Generate(fenValue);
-                        state.Score = score;
 
                         if (options.Features)
                         {
@@ -70,9 +66,7 @@ namespace Chess.Featuriser
         private void WriteHeadings(StreamWriter sw, Options options)
         {
             var builder = new StringBuilder();
-
-            //TODO support uci output
-            //builder.Append("Move").Append(Delimeter);
+            
             if (options.Fen)
             {
                 builder.Append("Fen").Append(Delimeter);
@@ -86,7 +80,6 @@ namespace Chess.Featuriser
                 builder.Append("B0-0").Append(Delimeter);
                 builder.Append("B0-0-0").Append(Delimeter);
                 builder.Append("Move").Append(Delimeter);
-                builder.Append("HalfMove").Append(Delimeter);
                 builder.Append("EpFile").Append(Delimeter);
                 builder.Append("EpRank").Append(Delimeter);
 
@@ -185,7 +178,7 @@ namespace Chess.Featuriser
 
             if (options.Scores)
             {
-                throw new NotImplementedException("How can we access the score from here?");
+                builder.Append(state.Score?.ToString()).Append(Delimeter);
             }
 
             builder.Remove(builder.Length - 1, 1);
@@ -202,7 +195,6 @@ namespace Chess.Featuriser
                 .Append(FormatBoolean(state.BlackCastleShort)).Append(Delimeter)
                 .Append(FormatBoolean(state.BlackCastleLong)).Append(Delimeter)
                 .Append(state.MoveNumber).Append(Delimeter)
-                .Append(state.HalfMoveClock).Append(Delimeter)
                 .Append(FormatSquare(state.EnPassantTarget)).Append(Delimeter);
 
             foreach (var key in state.WhiteMaterialCount.Keys)

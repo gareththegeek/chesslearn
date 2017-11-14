@@ -57,6 +57,7 @@
     <Compile Include="Fen\CsvScanner.cs" />
     <Compile Include="Fen\FenStateGenerator.cs" />
     <Compile Include="InputDeserialiser.cs" />
+    <Compile Include="LabelledFen.cs" />
     <Compile Include="State\BoardStateEqualityComparer.cs" />
     <Compile Include="State\BoardStateExtensions.cs" />
     <Compile Include="State\BoardState.cs" />
