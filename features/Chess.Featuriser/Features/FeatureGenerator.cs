@@ -53,7 +53,8 @@ namespace Chess.Featuriser.Features
         {
             for (var i = 0; i < (int)PieceListIndex.Count; i++)
             {
-                var piece = state.Flatten().SingleOrDefault(x => x.IsWhite == isWhite && (int)x.PieceListIndex == i);
+                // FirstOrDefault - it is possible for more than one piece to have the same piece index in the case of promotions
+                var piece = state.Flatten().FirstOrDefault(x => x.IsWhite == isWhite && (int)x.PieceListIndex == i);
 
                 if (piece == null)
                 {

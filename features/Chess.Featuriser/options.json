@@ -16,12 +16,12 @@
 
 // Configuration for testing feature generation from labelled data
 {
-  "input": "labelled.csv",
-  //"output": "labelledfeatures.csv",
+  "input": "KingBase2017-A00-A39 a-LABELLED.csv",
+  "output": "KingBase2017-A00-A39 a-LABELLED-FEATURES.csv",
   //"fen": true,
-  //"features": true,
-  "scores":  true,
-  "debug":  true
+  "features": true,
+  "scores": true
+  //"debug":  true
 }
 
 
