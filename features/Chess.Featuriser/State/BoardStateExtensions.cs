@@ -89,6 +89,11 @@ namespace Chess.Featuriser.State
         {
             bool canTake;
 
+            if (piece.Square.Equals(target))
+            {
+                return false;
+            }
+
             switch (piece.PieceType)
             {
                 case PieceType.Pawn:
