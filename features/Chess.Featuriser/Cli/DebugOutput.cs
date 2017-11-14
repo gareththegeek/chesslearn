@@ -138,7 +138,13 @@ namespace Chess.Featuriser.Cli
 
             for (var i = 0; i < (int)PieceListIndex.Count; i++)
             {
-                Console.Write(((PieceListIndex)i).ToPieceType().ToString().Substring(0, 1) + "  ");
+                var pieceName = ((PieceListIndex)i).ToPieceType().ToString();
+                var pieceAbbr = pieceName.Substring(0, 1);
+                if (pieceName.Contains("Knight"))
+                {
+                    pieceAbbr = "N";
+                }
+                Console.Write(pieceAbbr + "  ");
             }
             Console.WriteLine();
 
