@@ -25,6 +25,9 @@ mins = [1000] * columnCount
 maxs = [-1000] * columnCount
 
 for inputFile in inputFiles:
+
+    print("Processing file " + inputFile)
+
     with open(inputFile, "rt") as fin:
         rin = csv.reader(fin, delimiter=",")
         next(rin, None)
