@@ -1,23 +1,26 @@
 import csv
 
 inputFiles = [
-    "KingBase2017-A00-A39 a-LABELLED-FEATURES.csv",
-    "KingBase2017-A40-A79 a-LABELLED-FEATURES.csv",
-    "KingBase2017-A80-A99 a-LABELLED-FEATURES.csv",
-    "KingBase2017-B00-B19 a-LABELLED-FEATURES.csv",
-    "KingBase2017-B20-B49 a-LABELLED-FEATURES.csv",
-    "KingBase2017-B50-B99 a-LABELLED-FEATURES.csv",
-    "KingBase2017-C00-C19 a-LABELLED-FEATURES.csv",
-    "KingBase2017-C20-C59 a-LABELLED-FEATURES.csv",
-    "KingBase2017-C60-C99 a-LABELLED-FEATURES.csv",
-    "KingBase2017-D00-D29 a-LABELLED-FEATURES.csv",
-    "KingBase2017-D30-D69 a-LABLLED-FEATURES.csv",
-    "KingBase2017-D70-D99 a-LABELLED-FEATURES.csv",
-    "KingBase2017-E00-E19 a-LABELLED-FEATURES.csv",
-    "KingBase2017-E20-E59 a-LABELLED-FEATURES.csv",
-    "KingBase2017-E60-E99 a-LABELLED-FEATURES.csv"
+    "a.csv",
+    "b.csv",
+    "c.csv"
+    # "KingBase2017-A00-A39 a-LABELLED-FEATURES.csv",
+    # "KingBase2017-A40-A79 a-LABELLED-FEATURES.csv",
+    # "KingBase2017-A80-A99 a-LABELLED-FEATURES.csv",
+    # "KingBase2017-B00-B19 a-LABELLED-FEATURES.csv",
+    # "KingBase2017-B20-B49 a-LABELLED-FEATURES.csv",
+    # "KingBase2017-B50-B99 a-LABELLED-FEATURES.csv",
+    # "KingBase2017-C00-C19 a-LABELLED-FEATURES.csv",
+    # "KingBase2017-C20-C59 a-LABELLED-FEATURES.csv",
+    # "KingBase2017-C60-C99 a-LABELLED-FEATURES.csv",
+    # "KingBase2017-D00-D29 a-LABELLED-FEATURES.csv",
+    # "KingBase2017-D30-D69 a-LABLLED-FEATURES.csv",
+    # "KingBase2017-D70-D99 a-LABELLED-FEATURES.csv",
+    # "KingBase2017-E00-E19 a-LABELLED-FEATURES.csv",
+    # "KingBase2017-E20-E59 a-LABELLED-FEATURES.csv",
+    # "KingBase2017-E60-E99 a-LABELLED-FEATURES.csv"
 ]
-statsFile = "stats.csv"
+statsFile = "s.csv"
 
 print("Generating stats")
 
