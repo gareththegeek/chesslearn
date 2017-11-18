@@ -1,6 +1,4 @@
 import csv
-import sys
-import random
 
 inputFiles = [
     "KingBase2017-A00-A39 a-LABELLED-FEATURES.csv",
