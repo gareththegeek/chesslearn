@@ -32,11 +32,10 @@ testFile = "Test.csv"
 # testFile = "te.csv"
 
 testProbability = 0.2
-reportEvery = 1
+reportEvery = 10000
 
-def processRow(wtrain, wtest, rin):
-    for row in rin:
-        inputs = np.asarray(next(rin, None), dtype=float)
+def processRow(wtrain, wtest, row):    
+        inputs = np.asarray(row, dtype=float)
         outputs = (inputs - minimums) / ranges
         if random.random() < testProbability:
             wtest.writerow(outputs)
@@ -49,7 +48,12 @@ def processFiles(wtrain, wtest):
         with open(inputFile, "rt") as fin:
             rin = csv.reader(fin, delimiter=",")
             next(rin, None)
-            processRow(wtrain, wtest, rin)
+            index = 0
+            for row in rin:
+                if (index % reportEvery) == 0:
+                    print("Row index " + str(index))
+                processRow(wtrain, wtest, row)
+                index += 1
 
 print("Reading stats")
 
@@ -59,9 +63,8 @@ with open(statsFile, "rt") as fstat:
     minimums = np.asarray(next(rstat, None), dtype=float)
     maximums = np.asarray(next(rstat, None), dtype=float)
     ranges = maximums - minimums
-    if np.any(ranges == 0):
-        print("Zero range detected - this will cause divide by zeroes")
-        np.seterr(divide='ignore', invalid='ignore')
+    for i in np.where(ranges == 0):
+        ranges[i] = 1
 
 print("Read minimums and ranges")
 
