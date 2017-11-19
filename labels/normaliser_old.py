@@ -2,10 +2,11 @@ import csv
 import sys
 import random
 import numpy as np
-import math
-import tensorflow as tf
 
 inputFiles = [
+    # "a.csv",
+    # "b.csv",
+    # "c.csv"
     "KingBase2017-A00-A39 a-LABELLED-FEATURES.csv",
     "KingBase2017-A40-A79 a-LABELLED-FEATURES.csv",
     "KingBase2017-A80-A99 a-LABELLED-FEATURES.csv",
@@ -23,44 +24,23 @@ inputFiles = [
     "KingBase2017-E60-E99 a-LABELLED-FEATURES.csv"
 ]
 statsFile = "Statistics.csv"
-testFile = "Test.tfrecords"
-trainFile = "Train.tfrecords"
+trainFile = "Train.csv"
+testFile = "Test.csv"
 
+# statsFile = "s.csv"
+# trainFile = "tr.csv"
+# testFile = "te.csv"
+
+testProbability = 0.2
 reportEvery = 10000
 
-# inputFiles = [
-#     "a.csv", "b.csv", "c.csv"
-# ]
-
-#statsFile = "s.csv"
-#testFile = "te.tfrecords"
-#trainFile = "tr.tfrecords"
-
-#reportEvery = 1
-
-testProbability = 0.1
-
-def processRow(wtrain, wtest, row):
-    inputs = np.asarray(row, dtype=float)
-    outputs = (inputs - minimums) / ranges
-
-    features = outputs[:-1]
-    labels = outputs[-1:]
-
-    example = tf.train.Example(
-        features = tf.train.Features(
-            feature = {
-                "label": tf.train.Feature(float_list=tf.train.FloatList(value=labels.astype("float"))),
-                "features": tf.train.Feature(float_list=tf.train.FloatList(value=features.astype("float")))
-            }
-        )
-    )
-
-    if random.random() < testProbability:
-        wtest.write(example.SerializeToString())
-    else:
-        wtrain.write(example.SerializeToString())
-
+def processRow(wtrain, wtest, row):    
+        inputs = np.asarray(row, dtype=float)
+        outputs = (inputs - minimums) / ranges
+        if random.random() < testProbability:
+            wtest.writerow(outputs)
+        else:
+            wtrain.writerow(outputs)
 
 def processFiles(wtrain, wtest):
     for inputFile in inputFiles:
@@ -75,7 +55,6 @@ def processFiles(wtrain, wtest):
                 processRow(wtrain, wtest, row)
                 index += 1
 
-
 print("Reading stats")
 
 with open(statsFile, "rt") as fstat:
@@ -89,11 +68,13 @@ with open(statsFile, "rt") as fstat:
 
 print("Read minimums and ranges")
 
-print("Writing data to test and train files")
+with open(trainFile, "w", newline="") as ftrain:
+    wtrain = csv.writer(ftrain)
+    wtrain.writerow(headings)
+    with open(testFile, "w", newline="") as ftest:
+        wtest = csv.writer(ftest)
+        wtest.writerow(headings)
 
-wtrain = tf.python_io.TFRecordWriter(trainFile)
-wtest = tf.python_io.TFRecordWriter(testFile)
-
-processFiles(wtrain, wtest)
+        processFiles(wtrain, wtest)
 
 print("Done")

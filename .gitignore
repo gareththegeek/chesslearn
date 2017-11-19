@@ -410,3 +410,5 @@ OpenCover/
 *.pgn
 *.csv
 *.xlsx
+*.zip
+*.tfrecords
