@@ -51,7 +51,11 @@ This is achieved by executing the statifier.py script.  The results will be writ
 
 ## 5. Normalisation
 
-Normalisation of the data is performed by the normaliser.py script.  As with the statifier.py script, the input and output files are hard coded into the script.  In addition to normalising the data, this step combines the data from all 15 feature files and combines it into two files, the train and test csv files.  Each position has a 20% chance of being included in the test file, otherwise it will be included in the train file.
+Normalisation of the data is performed by the normaliser.py script.  As with the statifier.py script, the input and output files are hard coded into the script.  In addition to normalising the data, this step combines the data from all 15 feature files and combines it into two files, the train and test files.  Each position has a 10% chance of being included in the test file, otherwise it will be included in the train file.
+
+Loading this data to and from csv is no longer practical. It takes a very large (greater than 100Gb) amount of disk space and it is not possible to deserialise into memory when using tensorflow.  Instead, this step serialises the data to .tfrecords files. This binary format allows tensorflow to efficiently load data in batches and avoids the memory and performance issues associated with csv format.
+
+See this article for details [TensorFlow Data Input (Part 1): Placeholders, Protobufs & Queues](https://indico.io/blog/tensorflow-data-inputs-part1-placeholders-protobufs-queues/)
 
 Once this step is complete, the data is ready to be presented to the neural network for training.
 
